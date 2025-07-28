@@ -1,0 +1,2205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>24x7 Retail - Premium E-Voucher Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables for Theme */
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #0e3aa3;
+            --secondary: #ff6b35;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6; /* Added info color */
+            --light: #f9fafb;
+            --dark: #1f2937;
+            --gray: #6b7280;
+            --light-gray: #f3f4f6;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f0f5ff 0%, #e6f0ff 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Background decoration elements */
+        .bg-circle {
+            position: fixed;
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.15;
+            filter: blur(50px);
+        }
+
+        .circle-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(var(--primary), transparent);
+            top: -300px;
+            right: -300px;
+        }
+
+        .circle-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(var(--secondary), transparent);
+            bottom: -200px;
+            left: -200px;
+        }
+
+        /* Header styles */
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2.5rem;
+            box-shadow: var(--box-shadow);
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+        }
+
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.1)"/></svg>');
+            background-size: cover;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .logo-icon {
+            background: white;
+            width: 55px;
+            height: 55px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 14px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .logo-icon i {
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 2rem;
+            letter-spacing: -0.8px;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 2.8rem;
+            margin-bottom: 0.75rem;
+            text-shadow: 0 3px 5px rgba(0, 0, 0, 0.25);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            opacity: 0.9;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1.25rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 1.75rem;
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            box-shadow: var(--box-shadow);
+            gap: 10px;
+            white-space: nowrap;
+        }
+
+        .btn i {
+            font-size: 1.1rem;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--light);
+            transform: translateY(-4px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #e55a2b;
+            transform: translateY(-4px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        .btn-success:hover {
+            background: #0d966e;
+            transform: translateY(-4px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+        .btn-warning:hover {
+            background: #d88a00;
+            transform: translateY(-4px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #d43d3d;
+            transform: translateY(-4px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-light {
+            background: var(--light);
+            color: var(--dark);
+        }
+        .btn-light:hover {
+            background: #e5e7eb;
+            transform: translateY(-4px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Section styles */
+        section {
+            background: white;
+            box-shadow: var(--box-shadow);
+            border-radius: var(--border-radius);
+            margin: 0 auto 2.5rem;
+            padding: 2.5rem;
+            max-width: 1000px;
+            display: none;
+            position: relative;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        section h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark);
+            text-align: center;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+
+        section h2::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 2.5px;
+        }
+
+        /* Back button */
+        .back-btn {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--light-gray);
+            color: var(--gray);
+            border: none;
+            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .back-btn:hover {
+            background: #e5e7eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.6rem;
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.9rem 1.2rem;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background: var(--light);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.25);
+            background: white;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Voucher styles */
+        .voucher-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+            gap: 1.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .voucher-card {
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+            border: 1px solid #e5e7eb;
+            border-radius: var(--border-radius);
+            padding: 1.75rem;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            cursor: pointer; /* Added for selection */
+        }
+
+        .voucher-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.15);
+            border-color: var(--primary);
+        }
+
+        .voucher-card.selected {
+            border-color: var(--success);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.5), var(--box-shadow);
+            transform: translateY(-3px);
+        }
+
+        .voucher-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+        }
+
+        .voucher-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.05;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="%231a56db"/></svg>');
+            background-size: cover;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .voucher-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .voucher-value {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 800;
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            position: relative;
+            line-height: 1;
+        }
+
+        .voucher-value::before {
+            content: "Rs. ";
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-right: 2px;
+            color: var(--gray);
+        }
+
+        .voucher-type {
+            background: rgba(26, 86, 219, 0.1);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .voucher-details {
+            position: relative;
+            z-index: 1;
+            margin-top: auto;
+        }
+
+        .voucher-number {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-bottom: 0.8rem;
+            font-family: monospace;
+            word-break: break-all;
+        }
+
+        .message-display {
+            background: rgba(255, 107, 53, 0.08);
+            border-left: 4px solid var(--secondary);
+            padding: 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1.2rem 0;
+            font-style: italic;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+
+        .voucher-qr {
+            text-align: center;
+            margin: 1.5rem 0 0.5rem;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.02);
+        }
+
+        .voucher-qr img {
+            width: 130px;
+            height: 130px;
+            display: block;
+            margin: 0 auto;
+            border-radius: 4px;
+        }
+
+        .voucher-qr p {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 0.75rem;
+            line-height: 1.3;
+        }
+
+        /* Process graphics */
+        .process-graphic {
+            font-size: 4.5rem;
+            margin: 1.5rem auto;
+            color: var(--primary);
+            display: block;
+            text-align: center;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.08); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .process-message {
+            text-align: center;
+            margin: -1rem auto 2.5rem;
+            font-size: 1.15rem;
+            color: var(--dark);
+            max-width: 650px;
+            line-height: 1.6;
+        }
+
+        /* Cart styles */
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: var(--light);
+            border-radius: 8px;
+            margin-bottom: 0.75rem;
+            border: 1px solid #e5e7eb;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .cart-item-info {
+            flex-grow: 1;
+        }
+
+        .cart-item-amount {
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+        }
+
+        .cart-summary {
+            padding: 1.5rem;
+            background: var(--light);
+            border-radius: 8px;
+            font-weight: 600;
+            margin: 2rem 0;
+            border: 2px dashed #d1d5db;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .cart-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        /* Voucher Selection Lists */
+        .voucher-selection-list, .redeem-voucher-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+
+        .voucher-selection-list li, .redeem-voucher-list li {
+            background: var(--light);
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 500;
+            transition: var(--transition);
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+        .voucher-selection-list li:hover, .redeem-voucher-list li:hover {
+            border-color: var(--primary);
+            background: #f0f5ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+        }
+        /* Checkbox styling within list items */
+        .voucher-selection-list li input[type="checkbox"],
+        .redeem-voucher-list li input[type="checkbox"] {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary);
+            flex-shrink: 0; /* Prevent checkbox from shrinking */
+        }
+        .voucher-selection-list li label,
+        .redeem-voucher-list li label {
+            flex-grow: 1; /* Allow label to take available space */
+            cursor: pointer;
+        }
+
+        .allocation-controls {
+            background: var(--light-gray);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            border: 1px solid #e5e7eb;
+        }
+
+        .redeem-total-summary {
+            padding: 1.2rem;
+            background: rgba(16, 185, 129, 0.08);
+            border: 1px dashed var(--success);
+            border-radius: 8px;
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* Custom Toast Notification */
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            pointer-events: none;
+        }
+
+        .toast {
+            background-color: white;
+            color: var(--dark);
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: var(--box-shadow);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+            opacity: 0;
+            transform: translateX(100%);
+            animation: slideIn 0.5s ease-out forwards, fadeOut 0.5s ease-in 2.5s forwards;
+            pointer-events: auto;
+            min-width: 250px;
+            max-width: 350px;
+        }
+
+        .toast.success { border-left: 5px solid var(--success); }
+        .toast.error { border-left: 5px solid var(--danger); }
+        .toast.info { border-left: 5px solid var(--info); }
+        .toast.warning { border-left: 5px solid var(--warning); } /* Added warning toast */
+        .toast i { font-size: 1.3rem; }
+        .toast.success i { color: var(--success); }
+        .toast.error i { color: var(--danger); }
+        .toast.info i { color: var(--info); }
+        .toast.warning i { color: var(--warning); }
+
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; transform: translateX(100%); }
+        }
+
+        /* Loader specific styles */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            header {
+                padding: 2rem 1rem;
+            }
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            header p {
+                font-size: 1rem;
+            }
+            
+            section {
+                padding: 1.5rem;
+                margin-left: 1rem;
+                margin-right: 1rem;
+            }
+
+            section h2 {
+                font-size: 1.6rem;
+            }
+
+            .back-btn {
+                top: 1rem;
+                right: 1rem;
+                padding: 0.4rem 0.8rem;
+                font-size: 0.9rem;
+            }
+
+            .voucher-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 0.8rem;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 0.8rem 1.5rem;
+                font-size: 0.95rem;
+            }
+
+            .process-graphic {
+                font-size: 3.5rem;
+            }
+
+            .process-message {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+
+            .cart-summary {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cart-actions {
+                flex-direction: column;
+            }
+            
+            .voucher-selection-list, .redeem-voucher-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2.5rem 1.5rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Utility classes */
+        .text-center {
+            text-align: center;
+        }
+        
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .mt-4 { margin-top: 2rem; }
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mb-4 { margin-bottom: 2rem; }
+        .d-none { display: none !important; }
+        .d-block { display: block !important; }
+        .d-flex { display: flex !important; }
+        .justify-content-center { justify-content: center !important; }
+        .align-items-center { align-items: center !important; }
+    </style>
+</head>
+<body>
+    <div class="bg-circle circle-1"></div>
+    <div class="bg-circle circle-2"></div>
+
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-gift"></i>
+                </div>
+                <div class="logo-text">24x7 Retail</div>
+            </div>
+            <h1>Premium E-Voucher Portal</h1>
+            <p>Discover, purchase, and redeem digital vouchers anytime, anywhere. Perfect for gifting and personal use.</p>
+            <div class="actions">
+                <button class="btn btn-primary" onclick="showSection('buy')">
+                    <i class="fas fa-shopping-cart"></i> Buy Voucher
+                </button>
+                <button class="btn btn-secondary" onclick="showSection('verify')">
+                    <i class="fas fa-wallet"></i> My Vouchers
+                </button>
+                <button class="btn btn-warning" onclick="showSection('redeem-mobile-input')">
+                    <i class="fas fa-qrcode"></i> Redeem Voucher
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section id="verify">
+            <button class="back-btn" onclick="goHome()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h2>Verify with Mobile Number</h2>
+            
+            <i class="fas fa-mobile-alt process-graphic"></i>
+            <p class="process-message">Enter your mobile number to access your vouchers. We'll send an OTP for verification.</p>
+            
+            <form id="verifyUserForm" onsubmit="verifyUser(event)" class="mt-3">
+                <div class="form-group">
+                    <label for="mobileNumberVerify">Mobile Number</label>
+                    <input type="tel" id="mobileNumberVerify" class="form-control" placeholder="e.g., 9876543210" pattern="[0-9]{10}" title="Please enter a 10-digit mobile number" required>
+                </div>
+                <button class="btn btn-primary" type="submit" id="verifyUserBtn">
+                    <i class="fas fa-paper-plane"></i> Send OTP
+                </button>
+            </form>
+            <div id="otpInputGroup" class="form-group mt-4 d-none">
+                <label for="verifyOtpInput">Enter OTP sent to <span id="otpSentMobileVerify"></span></label>
+                <input type="text" id="verifyOtpInput" class="form-control" placeholder="Enter 6-digit OTP" pattern="[0-9]{6}" title="Please enter a 6-digit OTP">
+                <button class="btn btn-success mt-3" onclick="confirmOtp('verify')" id="confirmVerifyOtpBtn">
+                    <i class="fas fa-check"></i> Confirm OTP
+                </button>
+            </div>
+        </section>
+
+        <section id="myvouchers">
+            <button class="back-btn" onclick="goHome()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h2>Your Vouchers</h2>
+            
+            <div class="text-center mt-3 mb-4">
+                <h3>Total Voucher Value: <span style="color: var(--primary); font-weight: 700;">Rs. <span id="myVouchersTotalValue">0</span></span></h3>
+            </div>
+            
+            <div class="voucher-container" id="userVouchersDisplay">
+                <div class="text-center" style="grid-column: 1 / -1; padding: 2rem;">
+                    <i class="fas fa-wallet" style="font-size: 3rem; color: var(--gray); margin-bottom: 1rem;"></i>
+                    <p>No active vouchers found for this mobile number, or verification is pending.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="buy">
+            <button class="back-btn" onclick="goHome()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h2>Purchase E-Vouchers</h2>
+            
+            <i class="fas fa-shopping-bag process-graphic"></i>
+            <p class="process-message">Select the voucher amount and quantity to add to your cart. Multiple vouchers can be purchased in one transaction.</p>
+            
+            <form id="addToCartForm" class="mt-3" onsubmit="event.preventDefault(); addToCart();">
+                <div class="form-group">
+                    <label for="buyerMobileNumber">Your Mobile Number</label>
+                    <input type="tel" id="buyerMobileNumber" class="form-control" placeholder="For receipt and allocation (e.g., 9876543210)" pattern="[0-9]{10}" title="Please enter a 10-digit mobile number" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="voucherAmount">Voucher Amount</label>
+                    <select id="voucherAmount" class="form-control" required>
+                        <option value="" disabled selected>Select voucher amount</option>
+                        <option value="100">Rs. 100</option>
+                        <option value="200">Rs. 200</option>
+                        <option value="500">Rs. 500</option>
+                        <option value="1000">Rs. 1,000</option>
+                        <option value="2000">Rs. 2,000</option>
+                        <option value="2500">Rs. 2,500</option>
+                        <option value="5000">Rs. 5,000</option>
+                        <option value="10000">Rs. 10,000</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="voucherQuantity">Quantity</label>
+                    <input type="number" id="voucherQuantity" class="form-control" min="1" value="1" required>
+                </div>
+                
+                <button type="submit" class="btn btn-secondary" id="addToCartBtn">
+                    <i class="fas fa-cart-plus"></i> Add to Cart
+                </button>
+            </form>
+
+            <div id="cartSummary" class="mt-4">
+                <h3>Your Shopping Cart</h3>
+                <div id="cartItems" class="mt-2">
+                    <p class="text-center">Your cart is empty</p>
+                </div>
+                
+                <div class="cart-summary">
+                    <span>Total Vouchers: <strong id="cartTotalQuantity">0</strong></span>
+                    <span>Total Amount: <strong>Rs. <span id="cartTotalAmount">0</span></strong></span>
+                </div>
+                
+                <div class="cart-actions">
+                    <button type="button" class="btn btn-danger" onclick="clearCart()">
+                        <i class="fas fa-trash"></i> Clear Cart
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="proceedToPayment()" id="proceedToPaymentBtn" disabled>
+                        <i class="fas fa-lock"></i> Proceed to Payment
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="allocateVouchers">
+            <button class="back-btn" onclick="goHome()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h2>Allocate Your Vouchers</h2>
+            
+            <i class="fas fa-gift process-graphic"></i>
+            <p class="process-message">Assign your newly purchased vouchers to recipients. Enter their details and personalize your gift. Unallocated vouchers remain with you.</p>
+            
+            <div class="allocation-controls mt-3">
+                <div class="form-group">
+                    <label for="allocationRecipientMobile">Recipient Mobile Number (Optional)</label>
+                    <input type="tel" id="allocationRecipientMobile" class="form-control" placeholder="Leave empty to keep for yourself" pattern="[0-9]{10}" title="Please enter a 10-digit mobile number">
+                </div>
+                
+                <div class="form-group">
+                    <label for="allocationMessage">Personal Message (Optional)</label>
+                    <textarea id="allocationMessage" class="form-control" placeholder="Add a personal message for the recipient (e.g., Happy Birthday!)" rows="3"></textarea>
+                </div>
+            </div>
+
+            <h3>Select Vouchers to Allocate:</h3>
+            <div class="mt-2 mb-2 d-flex align-items-center">
+                <input type="checkbox" id="selectAllAllocVouchers" disabled>
+                <label for="selectAllAllocVouchers"><strong>Select All Vouchers</strong></label>
+            </div>
+            
+            <ul id="vouchersToAllocateList" class="voucher-selection-list">
+                <p class="text-center" style="grid-column: 1 / -1; padding: 1rem;">No vouchers available for allocation. Purchase some first!</p>
+            </ul>
+            
+            <div class="text-center mt-4">
+                <button class="btn btn-primary" onclick="allocateSelectedVouchers()" id="allocateVouchersBtn" disabled>
+                    <i class="fas fa-paper-plane"></i> Allocate Selected Vouchers
+                </button>
+            </div>
+        </section>
+
+        <section id="redeem-mobile-input">
+            <button class="back-btn" onclick="goHome()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h2>Redeem Your Vouchers</h2>
+            
+            <i class="fas fa-mobile process-graphic"></i>
+            <p class="process-message">Enter your mobile number to find your redeemable vouchers. You can redeem full or partial amounts.</p>
+            
+            <form id="redeemMobileForm" onsubmit="verifyRedeemMobile(event)" class="mt-3">
+                <div class="form-group">
+                    <label for="redeemMobileNumber">Mobile Number</label>
+                    <input type="tel" id="redeemMobileNumber" class="form-control" placeholder="Enter your registered mobile number (e.g., 9876543210)" pattern="[0-9]{10}" title="Please enter a 10-digit mobile number" required>
+                </div>
+                <button class="btn btn-primary" type="submit" id="findRedeemVouchersBtn">
+                    <i class="fas fa-search"></i> Find Vouchers
+                </button>
+            </form>
+            <div id="redeemOtpInputGroup" class="form-group mt-4 d-none">
+                <label for="redeemOtpInput">Enter OTP sent to <span id="otpSentMobileRedeem"></span></label>
+                <input type="text" id="redeemOtpInput" class="form-control" placeholder="Enter 6-digit OTP" pattern="[0-9]{6}" title="Please enter a 6-digit OTP">
+                <button class="btn btn-success mt-3" onclick="confirmOtp('redeem')" id="confirmRedeemOtpBtn">
+                    <i class="fas fa-check"></i> Confirm OTP
+                </button>
+            </div>
+        </section>
+
+        <section id="redeem-voucher-selection">
+            <button class="back-btn" onclick="goHome()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h2>Select Vouchers to Redeem</h2>
+            
+            <i class="fas fa-qrcode process-graphic"></i>
+            <p class="process-message">Select the vouchers you wish to redeem. You can redeem them fully, or split them into smaller amounts.</p>
+            
+            <div class="redeem-total-summary text-center mt-3 mb-3">
+                <h3>Total Selected Value: <span style="color: var(--success);">Rs. <span id="totalRedeemableValue">0</span></span></h3>
+            </div>
+
+            <div class="mt-2 mb-2 d-flex align-items-center">
+                <input type="checkbox" id="selectAllRedeemVouchers" disabled>
+                <label for="selectAllRedeemVouchers"><strong>Select All Redeemable Vouchers</strong></label>
+            </div>
+            
+            <ul id="redeemableVouchersList" class="redeem-voucher-list">
+                <p class="text-center" style="grid-column: 1 / -1; padding: 1rem;">No redeemable vouchers found for this mobile number.</p>
+            </ul>
+
+            <div class="text-center mt-4" id="proceedRedeemBtnContainer">
+                <button class="btn btn-primary" onclick="proceedToRedeemAction()" id="proceedToRedeemBtn" disabled>
+                    <i class="fas fa-arrow-right"></i> Proceed to Redeem
+                </button>
+            </div>
+        </section>
+
+        <section id="redeem-single-voucher-details">
+            <button class="back-btn" onclick="goHome()">
+                <i class="fas fa-arrow-left"></i> Back
+            </button>
+            <h2>Redeem Your Voucher</h2>
+            
+            <i class="fas fa-gift process-graphic"></i>
+            <p class="process-message">Choose to redeem the full amount or a partial amount. Partial redemption will create a new voucher for the remaining balance.</p>
+            
+            <div id="redeemDetailsSection" class="mt-3">
+                <div class="voucher-card">
+                    <div class="voucher-bg"></div>
+                    <div class="voucher-header">
+                        <div class="voucher-value"><span id="redeemDetailVoucherValue">0</span></div>
+                        <div class="voucher-type">Gift Card</div>
+                    </div>
+                    
+                    <div class="voucher-details">
+                        <div class="voucher-number">Voucher No: <span id="redeemDetailVoucherNumber">EVXXXXXXXXXX</span></div>
+                        
+                        <div class="message-display" id="redeemDetailMessage" style="display: none;">
+                            </div>
+                        
+                        <div class="voucher-qr">
+                            <img id="redemptionQRCode" src="" alt="Redemption QR Code">
+                            <p>Scan this QR code at any 24x7 Retail outlet</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="splitVoucherSubSection" class="mt-4">
+                    <h3>Redemption Options</h3>
+                    <p>Select the amount to redeem now. The remaining balance will be issued as a new voucher.</p>
+                    
+                    <div class="form-group mt-3">
+                        <label for="amountToRedeemNow">Amount to Redeem</label>
+                        <select id="amountToRedeemNow" class="form-control" onchange="updateRemainingBalance()">
+                            <option value="" disabled selected>Select redemption amount</option>
+                        </select>
+                        <p class="error-message" id="amountToRedeemNowError" style="display: none; color: var(--danger); font-size: 0.9rem;"></p>
+                    </div>
+                    
+                    <div class="text-center mt-3 mb-3">
+                        <h4>Remaining Balance: <span style="color: var(--primary);">Rs. <span id="remainingBalanceDisplay">0</span></span></h4>
+                    </div>
+                    
+                    <div class="cart-actions">
+                        <button class="btn btn-danger" onclick="cancelRedeem()">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button class="btn btn-success" onclick="confirmSplitRedemption()" id="confirmSplitRedemptionBtn">
+                            <i class="fas fa-check"></i> Confirm Redemption
+                        </button>
+                    </div>
+                    
+                    <div id="splitResultMessage" class="mt-3 d-none" style="padding: 1rem; background: rgba(16, 185, 129, 0.1); border-radius: 8px; color: var(--success); border: 1px solid var(--success);">
+                        </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 24x7 Retail Software Solutions (Pvt) Ltd. All Rights Reserved.</p>
+        <p class="mt-1">Secure e-voucher platform for seamless gifting and redemption experiences.</p>
+    </footer>
+
+    <div id="toast-container"></div>
+
+    <script>
+        // ======================================================================
+        // VOUCHER SYSTEM IMPLEMENTATION - IMPROVED VERSION
+        // ======================================================================
+        // This script implements a complete e-voucher system with buying, allocation,
+        // and redemption capabilities. The system simulates backend functionality
+        // with mock data for demonstration purposes, using asynchronous operations
+        // and a more structured approach.
+        //
+        // In a production environment, this would be replaced with API calls to a
+        // Node.js/Express backend with MSSQL database, and proper security
+        // measures.
+        // ======================================================================
+
+        // SECTION IDENTIFIERS
+        const sections = [
+            'verify', 'myvouchers', 'buy', 'allocateVouchers',
+            'redeem-mobile-input', 'redeem-voucher-selection',
+            'redeem-single-voucher-details'
+        ];
+
+        // STANDARD VOUCHER DENOMINATIONS (for partial redemption options)
+        const standardDenominations = [100, 200, 500, 1000, 2000, 2500, 5000]; // Removed 10000 to keep options reasonable for splitting
+
+        // APPLICATION STATE
+        let currentRedeemingVoucher = null;       // Voucher being redeemed in single view
+        let buyerMobileForAllocation = "";        // Buyer's mobile for allocation after purchase
+        let redeemableVouchersForUser = [];       // Vouchers fetched for redemption based on user's mobile
+        let currentVerifyMobileNumber = "";       // Mobile number for 'My Vouchers' verification
+        let currentRedeemMobileNumber = "";       // Mobile number for 'Redeem' verification
+        let selectedVouchersForMultiRedeem = [];  // Vouchers selected for multi-redeem (by their IDs)
+        let cart = [];                            // Shopping cart items (e.g., [{amount: 1000, quantity: 2}])
+        let unallocatedVouchers = [];             // Vouchers newly purchased and awaiting allocation
+
+        // MOCK DATABASE (Simulates database records)
+        // Each voucher has a unique ID and properties.
+        const mockDatabase = {
+            vouchers: {
+                "EV1234567890": {
+                    id: "EV1234567890",
+                    value: 1000,
+                    balance: 1000,
+                    redeemed: false, // This means fully redeemed. Partial will create new voucher.
+                    allocated: true, // true if assigned to an owner
+                    type: "Gift Card",
+                    ownerMobile: "9876543210",
+                    message: "Happy Birthday! Enjoy your gift.",
+                    purchaseDate: "2024-07-20",
+                    lastUpdated: "2024-07-20"
+                },
+                "EV9876543210": {
+                    id: "EV9876543210",
+                    value: 5000,
+                    balance: 5000,
+                    redeemed: false,
+                    allocated: true,
+                    type: "Gift Card",
+                    ownerMobile: "9876543210",
+                    message: "A token of our appreciation!",
+                    purchaseDate: "2024-06-15",
+                    lastUpdated: "2024-06-15"
+                },
+                "EV1122334455": {
+                    id: "EV1122334455",
+                    value: 2500,
+                    balance: 2500,
+                    redeemed: false,
+                    allocated: true,
+                    type: "Promotional",
+                    ownerMobile: "1234567890",
+                    message: "",
+                    purchaseDate: "2024-07-01",
+                    lastUpdated: "2024-07-01"
+                }
+            },
+            users: {
+                "9876543210": { name: "Alice Smith", otp: null },
+                "1234567890": { name: "Bob Johnson", otp: null },
+                "9998887776": { name: "Charlie Brown", otp: null } // A user who might buy/allocate
+            }
+        };
+
+        // --- UTILITY FUNCTIONS ---
+
+        /**
+         * Shows a specific section and hides all others.
+         * @param {string} sectionId The ID of the section to show.
+         */
+        function showSection(sectionId) {
+            sections.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) {
+                    section.style.display = 'none';
+                }
+            });
+            const activeSection = document.getElementById(sectionId);
+            if (activeSection) {
+                activeSection.style.display = 'block';
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top
+            }
+            // Reset OTP fields when navigating away, unless we are transitioning within an OTP flow
+            if (!['verify', 'redeem-mobile-input'].includes(sectionId)) {
+                document.getElementById('otpInputGroup').classList.add('d-none');
+                document.getElementById('verifyOtpInput').value = '';
+                document.getElementById('verifyUserBtn').classList.remove('d-none'); // Show Send OTP btn
+                
+                document.getElementById('redeemOtpInputGroup').classList.add('d-none');
+                document.getElementById('redeemOtpInput').value = '';
+                document.getElementById('findRedeemVouchersBtn').classList.remove('d-none'); // Show Find Vouchers btn
+            }
+            
+            // Clear specific states when going to a main section
+            if (['buy', 'verify', 'redeem-mobile-input'].includes(sectionId)) {
+                currentRedeemingVoucher = null;
+                redeemableVouchersForUser = [];
+                selectedVouchersForMultiRedeem = [];
+                // Not clearing cart or unallocated here as they persist across sections for user flow
+            }
+        }
+
+        /**
+         * Navigates back to the home view (header and initial buttons).
+         */
+        function goHome() {
+            sections.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) {
+                    section.style.display = 'none';
+                }
+            });
+            // Clear all relevant states when going to home
+            currentRedeemingVoucher = null;
+            redeemableVouchersForUser = [];
+            currentVerifyMobileNumber = "";
+            currentRedeemMobileNumber = "";
+            selectedVouchersForMultiRedeem = [];
+            unallocatedVouchers = []; // Clear unallocated on going home
+            cart = []; // Clear cart on going home
+            renderCart(); // Update cart display
+
+            // Reset OTP related fields
+            document.getElementById('mobileNumberVerify').value = '';
+            document.getElementById('redeemMobileNumber').value = '';
+            document.getElementById('otpInputGroup').classList.add('d-none');
+            document.getElementById('redeemOtpInputGroup').classList.add('d-none');
+            document.getElementById('verifyUserBtn').classList.remove('d-none');
+            document.getElementById('findRedeemVouchersBtn').classList.remove('d-none');
+
+             // For demonstration, pre-fill a mobile number in verify for quick testing
+            document.getElementById('mobileNumberVerify').value = '9876543210';
+            document.getElementById('redeemMobileNumber').value = '9876543210';
+        }
+
+        /**
+         * Displays a toast notification.
+         * @param {string} message The message to display.
+         * @param {string} type 'success', 'error', 'info', or 'warning'.
+         */
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.classList.add('toast', type);
+
+            let iconClass = '';
+            if (type === 'success') iconClass = 'fas fa-check-circle';
+            else if (type === 'error') iconClass = 'fas fa-times-circle';
+            else if (type === 'info') iconClass = 'fas fa-info-circle';
+            else if (type === 'warning') iconClass = 'fas fa-exclamation-triangle';
+
+
+            toast.innerHTML = `<i class="${iconClass}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+
+            // Remove toast after a delay
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.addEventListener('transitionend', () => toast.remove());
+            }, 3000);
+        }
+
+        /**
+         * Shows a loader on a button.
+         * @param {HTMLElement} buttonElement The button element.
+         * @param {string} originalText The original text of the button.
+         * @param {string} [iconClass] Optional icon class if button has an icon.
+         */
+        function showLoading(buttonElement, originalText, iconClass = '') {
+            buttonElement.dataset.originalText = originalText;
+            buttonElement.dataset.originalIconClass = iconClass || (buttonElement.querySelector('i') ? buttonElement.querySelector('i').className : '');
+            buttonElement.innerHTML = `<span class="loader"></span> ${originalText}...`;
+            buttonElement.disabled = true;
+        }
+
+        /**
+         * Hides the loader and restores button text.
+         * @param {HTMLElement} buttonElement The button element.
+         */
+        function hideLoading(buttonElement) {
+            const originalText = buttonElement.dataset.originalText;
+            const originalIconClass = buttonElement.dataset.originalIconClass;
+            if (originalText) {
+                if (originalIconClass) {
+                    buttonElement.innerHTML = `<i class="${originalIconClass}"></i> ${originalText}`;
+                } else {
+                    buttonElement.textContent = originalText;
+                }
+                buttonElement.disabled = false;
+                delete buttonElement.dataset.originalText;
+                delete buttonElement.dataset.originalIconClass;
+            }
+        }
+
+
+        // --- MOCK API CALLS (Simulating Backend) ---
+
+        /**
+         * Simulates sending an OTP to a mobile number.
+         * @param {string} mobileNumber
+         * @returns {Promise<boolean>} True if OTP sent, false if mobile not registered.
+         */
+        async function sendOtp(mobileNumber) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    if (mockDatabase.users[mobileNumber]) {
+                        const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+                        mockDatabase.users[mobileNumber].otp = otp;
+                        console.log(`[MOCK OTP] OTP for ${mobileNumber}: ${otp}`); // For debugging
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                }, 1000); // Simulate network delay
+            });
+        }
+
+        /**
+         * Simulates verifying an OTP.
+         * @param {string} mobileNumber
+         * @param {string} otp
+         * @returns {Promise<boolean>} True if OTP is correct.
+         */
+        async function verifyOtp(mobileNumber, otp) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    if (mockDatabase.users[mobileNumber] && mockDatabase.users[mobileNumber].otp === otp) {
+                        mockDatabase.users[mobileNumber].otp = null; // Clear OTP after use
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
+                }, 800);
+            });
+        }
+
+        /**
+         * Simulates fetching vouchers for a given mobile number.
+         * @param {string} mobileNumber
+         * @returns {Promise<Array>} List of vouchers.
+         */
+        async function fetchVouchers(mobileNumber) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    const vouchers = Object.values(mockDatabase.vouchers).filter(
+                        v => v.ownerMobile === mobileNumber && !v.redeemed // Only show vouchers that are not fully redeemed
+                    );
+                    resolve(vouchers);
+                }, 1500);
+            });
+        }
+
+        /**
+         * Simulates purchasing vouchers. Generates new unallocated vouchers.
+         * @param {string} buyerMobile The mobile number of the buyer.
+         * @param {Array<Object>} cartItems Array of {amount, quantity}
+         * @returns {Promise<Array>} Array of newly created voucher objects.
+         */
+        async function purchaseVouchers(buyerMobile, cartItems) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    const newVouchers = [];
+                    // Ensure buyer exists as a user
+                    if (!mockDatabase.users[buyerMobile]) {
+                        mockDatabase.users[buyerMobile] = { name: `User ${buyerMobile}`, otp: null };
+                    }
+
+                    cartItems.forEach(item => {
+                        for (let i = 0; i < item.quantity; i++) {
+                            const newVoucherId = "EV" + Date.now().toString().slice(-10) + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                            const newVoucher = {
+                                id: newVoucherId,
+                                value: item.amount,
+                                balance: item.amount,
+                                redeemed: false, // Initially not redeemed
+                                allocated: false, // Initially unallocated
+                                type: "Gift Card",
+                                ownerMobile: buyerMobile, // Buyer is initial owner
+                                message: "",
+                                purchaseDate: new Date().toISOString().slice(0, 10),
+                                lastUpdated: new Date().toISOString().slice(0, 10)
+                            };
+                            mockDatabase.vouchers[newVoucherId] = newVoucher;
+                            newVouchers.push(newVoucher);
+                        }
+                    });
+                    resolve(newVouchers);
+                }, 2000);
+            });
+        }
+
+        /**
+         * Simulates allocating vouchers to a recipient.
+         * @param {Array<string>} voucherIds IDs of vouchers to allocate.
+         * @param {string} recipientMobile The mobile number of the recipient.
+         * @param {string} message Personal message.
+         * @returns {Promise<boolean>} True if successful.
+         */
+        async function allocateVouchersApi(voucherIds, recipientMobile, message) {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    // Ensure recipient user exists
+                    if (!mockDatabase.users[recipientMobile]) {
+                        mockDatabase.users[recipientMobile] = { name: `User ${recipientMobile}`, otp: null };
+                    }
+
+                    voucherIds.forEach(id => {
+                        if (mockDatabase.vouchers[id]) {
+                            mockDatabase.vouchers[id].ownerMobile = recipientMobile;
+                            mockDatabase.vouchers[id].message = message;
+                            mockDatabase.vouchers[id].allocated = true;
+                            mockDatabase.vouchers[id].lastUpdated = new Date().toISOString().slice(0, 10);
+                        }
+                    });
+                    resolve(true);
+                }, 1500);
+            });
+        }
+
+        /**
+         * Simulates redeeming a voucher or part of it.
+         * @param {string} voucherId The ID of the voucher to redeem.
+         * @param {number} amountToRedeem The amount to redeem from this voucher.
+         * @param {string} mobileNumber The mobile number initiating redemption (for verification)
+         * @returns {Promise<Object>} An object with redemption status and new voucher if split.
+         */
+        async function redeemVoucherApi(voucherId, amountToRedeem, mobileNumber) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    const voucher = mockDatabase.vouchers[voucherId];
+
+                    if (!voucher || voucher.ownerMobile !== mobileNumber || voucher.redeemed || voucher.balance < amountToRedeem) {
+                        return reject(new Error("Invalid voucher, not owned by this mobile, already fully redeemed, or insufficient balance."));
+                    }
+
+                    voucher.balance -= amountToRedeem;
+                    voucher.lastUpdated = new Date().toISOString().slice(0, 10);
+
+                    let newVoucher = null;
+                    if (voucher.balance === 0) {
+                        voucher.redeemed = true; // Fully redeemed
+                    } else if (voucher.balance > 0) {
+                        // Mark original voucher as redeemed (consumed)
+                        voucher.redeemed = true; // Essential to prevent reusing old ID with new balance logic
+
+                        // Create a new voucher for the remaining balance
+                        const newVoucherId = "EV" + Date.now().toString().slice(-10) + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+                        newVoucher = {
+                            id: newVoucherId,
+                            value: voucher.balance, // New voucher value is the remaining balance
+                            balance: voucher.balance,
+                            redeemed: false,
+                            allocated: true,
+                            type: "Split Card",
+                            ownerMobile: mobileNumber,
+                            message: `Balance from ${voucher.id.slice(-6)}`,
+                            purchaseDate: voucher.purchaseDate, // Keep original purchase date
+                            lastUpdated: new Date().toISOString().slice(0, 10)
+                        };
+                        mockDatabase.vouchers[newVoucherId] = newVoucher;
+                    }
+
+                    resolve({ success: true, newVoucher });
+                }, 1800);
+            });
+        }
+
+        // --- GENERAL UI LOGIC ---
+
+        /**
+         * Handles OTP sending and input field display for 'My Vouchers' section.
+         * @param {Event} event The form submission event.
+         */
+        async function verifyUser(event) {
+            event.preventDefault();
+            const mobileNumber = document.getElementById('mobileNumberVerify').value;
+            const verifyUserBtn = document.getElementById('verifyUserBtn');
+
+            if (!mobileNumber || !/^\d{10}$/.test(mobileNumber)) {
+                showToast("Please enter a valid 10-digit mobile number.", "error");
+                return;
+            }
+
+            showLoading(verifyUserBtn, 'Send OTP', 'fas fa-paper-plane');
+
+            const otpSent = await sendOtp(mobileNumber);
+            hideLoading(verifyUserBtn);
+
+            if (otpSent) {
+                currentVerifyMobileNumber = mobileNumber; // Store mobile for OTP verification
+                document.getElementById('otpSentMobileVerify').textContent = mobileNumber;
+                document.getElementById('otpInputGroup').classList.remove('d-none');
+                verifyUserBtn.classList.add('d-none'); // Hide send OTP button
+                showToast(`OTP sent to ${mobileNumber}. Check console for mock OTP.`, "success");
+            } else {
+                showToast("Mobile number not registered. Please try another or purchase a voucher.", "error");
+            }
+        }
+
+        /**
+         * Handles OTP sending for redemption flow.
+         * @param {Event} event The form submission event.
+         */
+        async function verifyRedeemMobile(event) {
+            event.preventDefault();
+            const mobileNumber = document.getElementById('redeemMobileNumber').value;
+            const findRedeemVouchersBtn = document.getElementById('findRedeemVouchersBtn');
+
+            if (!mobileNumber || !/^\d{10}$/.test(mobileNumber)) {
+                showToast("Please enter a valid 10-digit mobile number.", "error");
+                return;
+            }
+
+            showLoading(findRedeemVouchersBtn, 'Find Vouchers', 'fas fa-search');
+
+            const otpSent = await sendOtp(mobileNumber);
+            hideLoading(findRedeemVouchersBtn);
+
+            if (otpSent) {
+                currentRedeemMobileNumber = mobileNumber; // Store mobile for OTP verification
+                document.getElementById('otpSentMobileRedeem').textContent = mobileNumber;
+                document.getElementById('redeemOtpInputGroup').classList.remove('d-none');
+                findRedeemVouchersBtn.classList.add('d-none'); // Hide find vouchers button
+                showToast(`OTP sent to ${mobileNumber}. Check console for mock OTP.`, "success");
+            } else {
+                showToast("Mobile number not registered for redemption. Please try another.", "error");
+            }
+        }
+
+
+        /**
+         * Confirms the entered OTP for both 'verify' and 'redeem' flows.
+         * @param {string} flow 'verify' or 'redeem'
+         */
+        async function confirmOtp(flow) {
+            let mobileNumber, otpInputId, otpInputGroup, confirmBtn, originalBtn, originalBtnId;
+            let loadingText, successMsg, errorMsg;
+
+            if (flow === 'verify') {
+                mobileNumber = currentVerifyMobileNumber;
+                otpInputId = 'verifyOtpInput';
+                otpInputGroup = 'otpInputGroup';
+                confirmBtn = document.getElementById('confirmVerifyOtpBtn');
+                originalBtn = document.getElementById('verifyUserBtn');
+                originalBtnId = 'verifyUserBtn';
+                loadingText = 'Confirming OTP';
+                successMsg = 'Mobile number verified. Fetching your vouchers...';
+                errorMsg = 'Invalid OTP. Please try again.';
+            } else if (flow === 'redeem') {
+                mobileNumber = currentRedeemMobileNumber;
+                otpInputId = 'redeemOtpInput';
+                otpInputGroup = 'redeemOtpInputGroup';
+                confirmBtn = document.getElementById('confirmRedeemOtpBtn');
+                originalBtn = document.getElementById('findRedeemVouchersBtn');
+                originalBtnId = 'findRedeemVouchersBtn';
+                loadingText = 'Confirming OTP';
+                successMsg = 'OTP verified. Loading redeemable vouchers...';
+                errorMsg = 'Invalid OTP. Please try again.';
+            } else {
+                return;
+            }
+
+            const otp = document.getElementById(otpInputId).value;
+
+            if (!otp || !/^\d{6}$/.test(otp)) {
+                showToast("Please enter a 6-digit OTP.", "error");
+                return;
+            }
+            if (!mobileNumber) { // Should not happen if previous steps are followed, but a safeguard
+                showToast("Mobile number not found for OTP verification. Please restart the process.", "error");
+                document.getElementById(otpInputGroup).classList.add('d-none');
+                originalBtn.classList.remove('d-none');
+                return;
+            }
+
+
+            showLoading(confirmBtn, loadingText, 'fas fa-check');
+
+            const otpCorrect = await verifyOtp(mobileNumber, otp);
+            hideLoading(confirmBtn);
+
+            if (otpCorrect) {
+                showToast(successMsg, "success");
+                document.getElementById(otpInputGroup).classList.add('d-none');
+                // The original button remains hidden, as the flow moves forward
+
+                if (flow === 'verify') {
+                    document.getElementById(originalBtnId).classList.add('d-none'); // Ensure it stays hidden
+                    fetchAndDisplayUserVouchers(mobileNumber);
+                    showSection('myvouchers');
+                } else if (flow === 'redeem') {
+                    document.getElementById(originalBtnId).classList.add('d-none'); // Ensure it stays hidden
+                    fetchAndDisplayRedeemableVouchers(mobileNumber);
+                    showSection('redeem-voucher-selection');
+                }
+            } else {
+                showToast(errorMsg, "error");
+                document.getElementById(otpInputId).value = ''; // Clear OTP field on failure
+            }
+        }
+
+
+        // --- MY VOUCHERS LOGIC ---
+
+        /**
+         * Fetches and displays vouchers for a given mobile number.
+         * @param {string} mobileNumber The mobile number to fetch vouchers for.
+         */
+        async function fetchAndDisplayUserVouchers(mobileNumber) {
+            const voucherDisplayDiv = document.getElementById('userVouchersDisplay');
+            const totalValueSpan = document.getElementById('myVouchersTotalValue');
+            voucherDisplayDiv.innerHTML = '<div class="text-center" style="grid-column: 1 / -1; padding: 2rem;"><span class="loader" style="width: 30px; height: 30px;"></span><p class="mt-2">Loading your vouchers...</p></div>';
+            totalValueSpan.textContent = '0';
+
+            const vouchers = await fetchVouchers(mobileNumber);
+
+            voucherDisplayDiv.innerHTML = '';
+            let totalValue = 0;
+
+            if (vouchers.length === 0) {
+                voucherDisplayDiv.innerHTML = `
+                    <div class="text-center" style="grid-column: 1 / -1; padding: 2rem;">
+                        <i class="fas fa-wallet" style="font-size: 3rem; color: var(--gray); margin-bottom: 1rem;"></i>
+                        <p>No active vouchers found for ${mobileNumber}.</p>
+                    </div>
+                `;
+            } else {
+                vouchers.forEach(voucher => {
+                    if (voucher.balance > 0) { // Only show active vouchers
+                        totalValue += voucher.balance;
+                        const voucherCard = document.createElement('div');
+                        voucherCard.classList.add('voucher-card');
+                        voucherCard.innerHTML = `
+                            <div class="voucher-bg"></div>
+                            <div class="voucher-header">
+                                <div class="voucher-value">${voucher.balance.toLocaleString()}</div>
+                                <div class="voucher-type">${voucher.type}</div>
+                            </div>
+                            <div class="voucher-details">
+                                <div class="voucher-number">Voucher No: ${voucher.id}</div>
+                                ${voucher.message ? `<div class="message-display">${voucher.message}</div>` : ''}
+                                <div class="voucher-qr">
+                                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(voucher.id)}" alt="QR Code for ${voucher.id}">
+                                    <p>Scan for details/redemption</p>
+                                </div>
+                            </div>
+                        `;
+                        voucherDisplayDiv.appendChild(voucherCard);
+                    }
+                });
+            }
+            totalValueSpan.textContent = totalValue.toLocaleString();
+        }
+
+        // --- BUY VOUCHERS LOGIC ---
+
+        /**
+         * Adds selected voucher amount and quantity to the cart.
+         */
+        function addToCart() {
+            const buyerMobileInput = document.getElementById('buyerMobileNumber');
+            const voucherAmountSelect = document.getElementById('voucherAmount');
+            const voucherQuantityInput = document.getElementById('voucherQuantity');
+
+            const buyerMobile = buyerMobileInput.value;
+            const amount = parseInt(voucherAmountSelect.value);
+            const quantity = parseInt(voucherQuantityInput.value);
+
+            if (!buyerMobile || !/^\d{10}$/.test(buyerMobile)) {
+                showToast("Please enter a valid 10-digit mobile number for the buyer.", "error");
+                return;
+            }
+            if (isNaN(amount) || amount <= 0) {
+                showToast("Please select a valid voucher amount.", "error");
+                return;
+            }
+            if (isNaN(quantity) || quantity <= 0) {
+                showToast("Quantity must be at least 1.", "error");
+                return;
+            }
+
+            buyerMobileForAllocation = buyerMobile; // Store buyer's mobile for allocation later
+
+            const existingItemIndex = cart.findIndex(item => item.amount === amount);
+            if (existingItemIndex > -1) {
+                cart[existingItemIndex].quantity += quantity;
+            } else {
+                cart.push({ amount, quantity });
+            }
+
+            renderCart();
+            showToast(`${quantity} x Rs. ${amount.toLocaleString()} voucher(s) added to cart.`, "success");
+
+            // Reset form
+            voucherAmountSelect.value = "";
+            voucherQuantityInput.value = "1";
+        }
+
+        /**
+         * Renders the current state of the shopping cart.
+         */
+        function renderCart() {
+            const cartItemsDiv = document.getElementById('cartItems');
+            const cartTotalQuantitySpan = document.getElementById('cartTotalQuantity');
+            const cartTotalAmountSpan = document.getElementById('cartTotalAmount');
+            const proceedToPaymentBtn = document.getElementById('proceedToPaymentBtn');
+
+            cartItemsDiv.innerHTML = '';
+            let totalQuantity = 0;
+            let totalAmount = 0;
+
+            if (cart.length === 0) {
+                cartItemsDiv.innerHTML = '<p class="text-center">Your cart is empty</p>';
+                proceedToPaymentBtn.disabled = true;
+            } else {
+                cart.forEach((item) => {
+                    const cartItem = document.createElement('div');
+                    cartItem.classList.add('cart-item');
+                    cartItem.innerHTML = `
+                        <span class="cart-item-info">${item.quantity} x Rs. ${item.amount.toLocaleString()}</span>
+                        <span class="cart-item-amount">Rs. ${(item.quantity * item.amount).toLocaleString()}</span>
+                    `;
+                    cartItemsDiv.appendChild(cartItem);
+                    totalQuantity += item.quantity;
+                    totalAmount += (item.quantity * item.amount);
+                });
+                proceedToPaymentBtn.disabled = false;
+            }
+
+            cartTotalQuantitySpan.textContent = totalQuantity;
+            cartTotalAmountSpan.textContent = totalAmount.toLocaleString();
+        }
+
+        /**
+         * Clears all items from the cart.
+         */
+        function clearCart() {
+            cart = [];
+            buyerMobileForAllocation = "";
+            renderCart();
+            showToast("Cart cleared.", "info");
+        }
+
+        /**
+         * Simulates proceeding to payment and then to voucher allocation.
+         */
+        async function proceedToPayment() {
+            if (cart.length === 0) {
+                showToast("Your cart is empty. Add some vouchers first!", "error");
+                return;
+            }
+
+            const buyerMobile = document.getElementById('buyerMobileNumber').value;
+            if (!buyerMobile || !/^\d{10}$/.test(buyerMobile)) {
+                showToast("Please ensure your mobile number is correctly entered before proceeding.", "error");
+                return;
+            }
+
+            const proceedBtn = document.getElementById('proceedToPaymentBtn');
+            showLoading(proceedBtn, 'Processing Payment', 'fas fa-lock');
+
+            unallocatedVouchers = await purchaseVouchers(buyerMobile, cart);
+            hideLoading(proceedBtn);
+
+            if (unallocatedVouchers.length > 0) {
+                cart = []; // Clear cart after successful purchase
+                renderCart(); // Update cart display
+                showToast(`Payment successful! ${unallocatedVouchers.length} vouchers purchased.`, "success");
+                populateVouchersToAllocate();
+                showSection('allocateVouchers');
+            } else {
+                showToast("Payment failed or no vouchers were generated. Please try again.", "error");
+            }
+        }
+
+        // --- ALLOCATE VOUCHERS LOGIC ---
+
+        /**
+         * Populates the list of unallocated vouchers for selection.
+         */
+        function populateVouchersToAllocate() {
+            const listContainer = document.getElementById('vouchersToAllocateList');
+            const selectAllCheckbox = document.getElementById('selectAllAllocVouchers');
+            const allocateBtn = document.getElementById('allocateVouchersBtn');
+            listContainer.innerHTML = ''; // Clear previous list
+
+            if (unallocatedVouchers.length === 0) {
+                listContainer.innerHTML = '<p class="text-center" style="grid-column: 1 / -1; padding: 1rem;">No vouchers available for allocation. Purchase some first!</p>';
+                selectAllCheckbox.checked = false;
+                selectAllCheckbox.disabled = true;
+                allocateBtn.disabled = true; // Disable allocate button if no vouchers
+                return;
+            }
+
+            selectAllCheckbox.disabled = false;
+            allocateBtn.disabled = true; // Initially disable until something is selected
+
+            unallocatedVouchers.forEach(voucher => {
+                const listItem = document.createElement('li');
+                listItem.dataset.voucherId = voucher.id;
+                listItem.innerHTML = `
+                    <input type="checkbox" id="alloc-${voucher.id}" class="alloc-voucher-checkbox">
+                    <label for="alloc-${voucher.id}">Rs. ${voucher.value.toLocaleString()} (ID: ${voucher.id.slice(-6)})</label>
+                `;
+                listContainer.appendChild(listItem);
+            });
+
+            // Add event listeners for checkboxes
+            document.querySelectorAll('.alloc-voucher-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', updateAllocateSelection);
+            });
+            selectAllCheckbox.addEventListener('change', toggleSelectAllAllocVouchers);
+            updateAllocateSelection(); // Initial check for button state
+        }
+
+        /**
+         * Updates the state of the "Select All" checkbox for allocation and button.
+         */
+        function updateAllocateSelection() {
+            const allCheckboxes = document.querySelectorAll('.alloc-voucher-checkbox');
+            const selectedCheckboxes = document.querySelectorAll('.alloc-voucher-checkbox:checked');
+            const selectAllCheckbox = document.getElementById('selectAllAllocVouchers');
+            const allocateBtn = document.getElementById('allocateVouchersBtn');
+
+            selectAllCheckbox.checked = allCheckboxes.length > 0 && selectedCheckboxes.length === allCheckboxes.length;
+            allocateBtn.disabled = selectedCheckboxes.length === 0;
+        }
+
+        /**
+         * Toggles the selection of all vouchers for allocation.
+         */
+        function toggleSelectAllAllocVouchers() {
+            const isChecked = document.getElementById('selectAllAllocVouchers').checked;
+            document.querySelectorAll('.alloc-voucher-checkbox').forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
+            updateAllocateSelection();
+        }
+
+
+        /**
+         * Allocates selected vouchers to a recipient.
+         */
+        async function allocateSelectedVouchers() {
+            const recipientMobile = document.getElementById('allocationRecipientMobile').value;
+            const message = document.getElementById('allocationMessage').value;
+
+            const selectedVoucherIds = Array.from(document.querySelectorAll('.alloc-voucher-checkbox:checked'))
+                                            .map(cb => cb.closest('li').dataset.voucherId);
+
+            if (selectedVoucherIds.length === 0) {
+                showToast("Please select at least one voucher to allocate.", "error");
+                return;
+            }
+
+            let finalRecipient = recipientMobile.trim();
+            if (!finalRecipient) {
+                // If recipient mobile is empty, allocate to the buyer
+                finalRecipient = buyerMobileForAllocation;
+                if (!finalRecipient) { // Fallback if buyer mobile wasn't set (shouldn't happen with validation)
+                    showToast("Buyer mobile number is missing. Cannot allocate.", "error");
+                    return;
+                }
+            } else if (!/^\d{10}$/.test(finalRecipient)) {
+                showToast("Please enter a valid 10-digit recipient mobile number, or leave empty to keep for yourself.", "error");
+                return;
+            }
+
+            const allocateBtn = document.getElementById('allocateVouchersBtn');
+            showLoading(allocateBtn, 'Allocating', 'fas fa-paper-plane');
+
+            const success = await allocateVouchersApi(selectedVoucherIds, finalRecipient, message);
+            hideLoading(allocateBtn);
+
+            if (success) {
+                showToast(`${selectedVoucherIds.length} voucher(s) allocated to ${finalRecipient}.`, "success");
+                // Remove allocated vouchers from unallocated list
+                unallocatedVouchers = unallocatedVouchers.filter(v => !selectedVoucherIds.includes(v.id));
+                populateVouchersToAllocate(); // Re-render the list
+
+                // If all vouchers are allocated, suggest going home
+                if (unallocatedVouchers.length === 0) {
+                    showToast("All purchased vouchers have been allocated!", "info");
+                    setTimeout(() => goHome(), 2000); // Go home after a short delay
+                }
+                document.getElementById('allocationRecipientMobile').value = ''; // Clear form
+                document.getElementById('allocationMessage').value = '';
+            } else {
+                showToast("Failed to allocate vouchers. Please try again.", "error");
+            }
+        }
+
+
+        // --- REDEEM VOUCHERS LOGIC ---
+
+        /**
+         * Fetches and displays redeemable vouchers for the currently verified mobile.
+         * @param {string} mobileNumber
+         */
+        async function fetchAndDisplayRedeemableVouchers(mobileNumber) {
+            const listContainer = document.getElementById('redeemableVouchersList');
+            const totalRedeemableValueSpan = document.getElementById('totalRedeemableValue');
+            const proceedRedeemBtn = document.getElementById('proceedToRedeemBtn');
+            const selectAllRedeemCheckbox = document.getElementById('selectAllRedeemVouchers');
+
+            listContainer.innerHTML = '<p class="text-center" style="grid-column: 1 / -1; padding: 2rem;"><span class="loader" style="width: 30px; height: 30px;"></span><p class="mt-2">Searching for redeemable vouchers...</p></p>';
+            totalRedeemableValueSpan.textContent = '0';
+            proceedRedeemBtn.disabled = true;
+            selectAllRedeemCheckbox.disabled = true;
+            selectedVouchersForMultiRedeem = []; // Reset selected vouchers
+
+            const vouchers = await fetchVouchers(mobileNumber);
+            redeemableVouchersForUser = vouchers.filter(v => v.balance > 0); // Only show active, non-zero balance vouchers
+
+            listContainer.innerHTML = '';
+            if (redeemableVouchersForUser.length === 0) {
+                listContainer.innerHTML = `
+                    <p class="text-center" style="grid-column: 1 / -1; padding: 2rem;">
+                        <i class="fas fa-frown" style="font-size: 3rem; color: var(--gray); margin-bottom: 1rem;"></i>
+                        <p>No active redeemable vouchers found for ${mobileNumber}.</p>
+                    </p>
+                `;
+                selectAllRedeemCheckbox.checked = false;
+                selectAllRedeemCheckbox.disabled = true;
+            } else {
+                selectAllRedeemCheckbox.disabled = false;
+                redeemableVouchersForUser.forEach(voucher => {
+                    const listItem = document.createElement('li');
+                    listItem.dataset.voucherId = voucher.id;
+                    listItem.classList.add('voucher-card-item'); // Add class for styling if needed
+                    listItem.innerHTML = `
+                        <input type="checkbox" id="redeem-${voucher.id}" class="redeem-voucher-checkbox">
+                        <label for="redeem-${voucher.id}">
+                            Rs. ${voucher.balance.toLocaleString()} (ID: ${voucher.id.slice(-6)}) ${voucher.message ? ` - "${voucher.message.substring(0,20)}${voucher.message.length > 20 ? '...' : ''}"` : ''}
+                        </label>
+                    `;
+                    listContainer.appendChild(listItem);
+                });
+
+                // Add event listeners for checkboxes
+                document.querySelectorAll('.redeem-voucher-checkbox').forEach(checkbox => {
+                    checkbox.addEventListener('change', updateRedeemSelection);
+                });
+                selectAllRedeemCheckbox.addEventListener('change', toggleSelectAllRedeemVouchers);
+            }
+            updateRedeemSelection(); // Initial update
+        }
+
+        /**
+         * Updates the total selected value for redemption and button state.
+         */
+        function updateRedeemSelection() {
+            selectedVouchersForMultiRedeem = [];
+            let totalSelectedValue = 0;
+            const checkboxes = document.querySelectorAll('.redeem-voucher-checkbox:checked');
+            checkboxes.forEach(checkbox => {
+                const voucherId = checkbox.closest('li').dataset.voucherId;
+                const voucher = redeemableVouchersForUser.find(v => v.id === voucherId);
+                if (voucher) {
+                    selectedVouchersForMultiRedeem.push(voucher);
+                    totalSelectedValue += voucher.balance;
+                }
+            });
+            document.getElementById('totalRedeemableValue').textContent = totalSelectedValue.toLocaleString();
+            document.getElementById('proceedToRedeemBtn').disabled = selectedVouchersForMultiRedeem.length === 0;
+
+            const allCheckboxes = document.querySelectorAll('.redeem-voucher-checkbox');
+            const selectAllCheckbox = document.getElementById('selectAllRedeemVouchers');
+            const allChecked = Array.from(allCheckboxes).every(checkbox => checkbox.checked);
+            selectAllCheckbox.checked = allChecked && allCheckboxes.length > 0;
+        }
+
+        /**
+         * Toggles the selection of all redeemable vouchers.
+         */
+        function toggleSelectAllRedeemVouchers() {
+            const isChecked = document.getElementById('selectAllRedeemVouchers').checked;
+            document.querySelectorAll('.redeem-voucher-checkbox').forEach(checkbox => {
+                checkbox.checked = isChecked;
+            });
+            updateRedeemSelection();
+        }
+
+
+        /**
+         * Proceeds to the redemption action based on selected vouchers.
+         * If one voucher, goes to single view. If multiple, prompts for full redemption.
+         */
+        async function proceedToRedeemAction() {
+            if (selectedVouchersForMultiRedeem.length === 0) {
+                showToast("Please select at least one voucher to redeem.", "error");
+                return;
+            }
+
+            const totalValueToRedeem = selectedVouchersForMultiRedeem.reduce((sum, v) => sum + v.balance, 0);
+
+            // Option 1: If only one voucher selected, allow partial redemption
+            if (selectedVouchersForMultiRedeem.length === 1) {
+                currentRedeemingVoucher = selectedVouchersForMultiRedeem[0];
+                displaySingleVoucherForRedemption(currentRedeemingVoucher);
+                showSection('redeem-single-voucher-details');
+            }
+            // Option 2: If multiple vouchers, redeem all fully
+            else {
+                const confirmRedeem = confirm(`You are about to redeem a total of Rs. ${totalValueToRedeem.toLocaleString()} from ${selectedVouchersForMultiRedeem.length} vouchers fully. Do you want to proceed?`);
+                if (confirmRedeem) {
+                    await performMultiVoucherRedemption(selectedVouchersForMultiRedeem);
+                } else {
+                    showToast("Redemption cancelled.", "info");
+                }
+            }
+        }
+
+        /**
+         * Performs redemption for multiple selected vouchers (always full redemption).
+         * @param {Array<Object>} vouchersToRedeem
+         */
+        async function performMultiVoucherRedemption(vouchersToRedeem) {
+            const proceedBtn = document.getElementById('proceedToRedeemBtn');
+            showLoading(proceedBtn, 'Redeeming', 'fas fa-arrow-right');
+            
+            let successfulRedemptions = 0;
+            let totalRedeemedAmount = 0;
+            const redeemedVoucherIds = []; // Track IDs of vouchers fully redeemed (or whose balance was moved)
+
+            for (const voucher of vouchersToRedeem) {
+                try {
+                    // Always redeem full balance for multi-redeem for simplicity
+                    const result = await redeemVoucherApi(voucher.id, voucher.balance, currentRedeemMobileNumber);
+                    if (result.success) {
+                        successfulRedemptions++;
+                        totalRedeemedAmount += voucher.balance;
+                        redeemedVoucherIds.push(voucher.id);
+                        // Handle new voucher if original was split (e.g., if there's a bug in previous logic and it wasn't fully redeemed)
+                        if (result.newVoucher) {
+                            mockDatabase.vouchers[result.newVoucher.id] = result.newVoucher;
+                        }
+                    }
+                } catch (error) {
+                    console.error(`Failed to redeem voucher ${voucher.id}:`, error.message);
+                    showToast(`Failed to redeem voucher ${voucher.id.slice(-6)}: ${error.message}`, "error");
+                }
+            }
+
+            hideLoading(proceedBtn);
+
+            if (successfulRedemptions > 0) {
+                showToast(`Successfully redeemed ${successfulRedemptions} voucher(s) totaling Rs. ${totalRedeemedAmount.toLocaleString()}.`, "success");
+                
+                // Refresh the redeemable vouchers list based on currentRedeemMobileNumber
+                await fetchAndDisplayRedeemableVouchers(currentRedeemMobileNumber);
+                
+                // After successful redemption, go back to main redeem input page
+                setTimeout(() => showSection('redeem-mobile-input'), 2000);
+            } else {
+                showToast("No vouchers were redeemed. Please check for errors.", "error");
+            }
+        }
+
+
+        /**
+         * Displays a single voucher for partial or full redemption.
+         * @param {Object} voucher The voucher object.
+         */
+        function displaySingleVoucherForRedemption(voucher) {
+            document.getElementById('redeemDetailVoucherValue').textContent = voucher.balance.toLocaleString();
+            document.getElementById('redeemDetailVoucherNumber').textContent = voucher.id;
+            const messageDisplay = document.getElementById('redeemDetailMessage');
+            if (voucher.message) {
+                messageDisplay.textContent = voucher.message;
+                messageDisplay.style.display = 'block';
+            } else {
+                messageDisplay.style.display = 'none';
+            }
+            document.getElementById('redemptionQRCode').src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(voucher.id)}`;
+
+            populateRedemptionAmounts(voucher.balance);
+            document.getElementById('remainingBalanceDisplay').textContent = voucher.balance.toLocaleString();
+            document.getElementById('splitResultMessage').classList.add('d-none'); // Hide previous messages
+            document.getElementById('amountToRedeemNowError').style.display = 'none';
+            document.getElementById('confirmSplitRedemptionBtn').disabled = false; // Enable by default
+        }
+
+        /**
+         * Populates the dropdown for redemption amounts for a single voucher.
+         * @param {number} currentBalance The current balance of the voucher.
+         */
+        function populateRedemptionAmounts(currentBalance) {
+            const selectElement = document.getElementById('amountToRedeemNow');
+            selectElement.innerHTML = '<option value="" disabled selected>Select redemption amount</option>';
+
+            // Add an option for full redemption
+            const fullRedeemOption = document.createElement('option');
+            fullRedeemOption.value = currentBalance;
+            fullRedeemOption.textContent = `Full Amount (Rs. ${currentBalance.toLocaleString()})`;
+            selectElement.appendChild(fullRedeemOption);
+
+            // Add options for standard denominations less than current balance
+            standardDenominations.forEach(amount => {
+                if (amount < currentBalance) {
+                    const option = document.createElement('option');
+                    option.value = amount;
+                    option.textContent = `Rs. ${amount.toLocaleString()}`;
+                    selectElement.appendChild(option);
+                }
+            });
+            selectElement.value = currentBalance; // Pre-select full amount
+        }
+
+        /**
+         * Updates the remaining balance display when redemption amount is changed.
+         */
+        function updateRemainingBalance() {
+            const selectElement = document.getElementById('amountToRedeemNow');
+            const selectedAmount = parseInt(selectElement.value);
+            const currentBalance = currentRedeemingVoucher.balance;
+            const remaining = currentBalance - selectedAmount;
+            document.getElementById('remainingBalanceDisplay').textContent = remaining.toLocaleString();
+
+            const errorMsg = document.getElementById('amountToRedeemNowError');
+            if (isNaN(selectedAmount) || selectedAmount <= 0 || selectedAmount > currentBalance) {
+                errorMsg.textContent = "Please select a valid amount to redeem.";
+                errorMsg.style.display = 'block';
+                document.getElementById('confirmSplitRedemptionBtn').disabled = true;
+            } else {
+                errorMsg.style.display = 'none';
+                document.getElementById('confirmSplitRedemptionBtn').disabled = false;
+            }
+        }
+
+        /**
+         * Confirms and performs partial or full redemption for a single voucher.
+         */
+        async function confirmSplitRedemption() {
+            const amountToRedeem = parseInt(document.getElementById('amountToRedeemNow').value);
+            const currentBalance = currentRedeemingVoucher.balance;
+
+            if (isNaN(amountToRedeem) || amountToRedeem <= 0 || amountToRedeem > currentBalance) {
+                showToast("Please select a valid amount to redeem.", "error");
+                return;
+            }
+
+            const confirmBtn = document.getElementById('confirmSplitRedemptionBtn');
+            showLoading(confirmBtn, 'Redeeming', 'fas fa-check');
+
+            try {
+                const result = await redeemVoucherApi(currentRedeemingVoucher.id, amountToRedeem, currentRedeemMobileNumber);
+                hideLoading(confirmBtn);
+
+                if (result.success) {
+                    const messageDiv = document.getElementById('splitResultMessage');
+                    messageDiv.classList.remove('d-none');
+                    let successMessage = `Successfully redeemed Rs. ${amountToRedeem.toLocaleString()} from voucher ${currentRedeemingVoucher.id.slice(-6)}.`;
+
+                    if (result.newVoucher) {
+                        successMessage += `<br>A new voucher (ID: ${result.newVoucher.id.slice(-6)}) for the remaining Rs. ${result.newVoucher.balance.toLocaleString()} has been issued.`;
+                    } else {
+                        successMessage += `<br>Voucher ${currentRedeemingVoucher.id.slice(-6)} is now fully redeemed.`;
+                    }
+                    messageDiv.innerHTML = `<i class="fas fa-check-circle me-2"></i> ${successMessage}`;
+                    showToast("Redemption successful!", "success");
+
+                    // Reset current redeeming voucher state
+                    currentRedeemingVoucher = null;
+                    
+                    // After successful redemption, go back to main redeem input page
+                    setTimeout(() => showSection('redeem-mobile-input'), 3000);
+
+                } else {
+                    showToast("Redemption failed. Please try again.", "error");
+                }
+            } catch (error) {
+                hideLoading(confirmBtn);
+                showToast(error.message || "An unexpected error occurred during redemption.", "error");
+            }
+        }
+
+        /**
+         * Cancels the current single voucher redemption process.
+         */
+        function cancelRedeem() {
+            currentRedeemingVoucher = null;
+            // currentRedeemMobileNumber is kept, as the user might want to redeem another voucher for same number
+            document.getElementById('splitResultMessage').classList.add('d-none');
+            showSection('redeem-mobile-input'); // Go back to mobile input for redemption
+        }
+
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            goHome(); // Start on the home screen implicitly by hiding all sections
+            renderCart(); // Initialize cart display
+            // For demonstration, pre-fill a mobile number in verify for quick testing
+            document.getElementById('mobileNumberVerify').value = '9876543210';
+            document.getElementById('redeemMobileNumber').value = '9876543210';
+        });
+
+    </script>
+</body>
+</html>
