@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Voucher System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        .table-container {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-2xl space-y-6">
+        <h1 class="text-3xl font-bold text-center text-gray-800">E-Voucher System</h1>
+
+        <div class="space-y-4 p-6 bg-gray-50 rounded-lg border border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-700">Customer Access</h2>
+            <div class="flex items-center space-x-2">
+                <input type="text" id="memberCodeInput" placeholder="Enter Member Code" class="flex-grow p-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200">
+                <button id="getBalanceBtn" class="bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200">
+                    Get Balance
+                </button>
+            </div>
+            <div id="balanceDisplay" class="bg-blue-100 text-blue-800 p-4 rounded-lg text-center font-bold text-xl hidden">
+                Available Balance: <span id="currentBalance">0.00</span>
+            </div>
+        </div>
+
+        <div class="space-y-4 p-6 bg-gray-50 rounded-lg border border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-700">Create Voucher</h2>
+            <div class="flex items-center space-x-2">
+                <input type="number" id="voucherAmountInput" placeholder="Voucher Amount" min="1" step="0.01" class="flex-grow p-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200">
+                <button id="createVoucherBtn" class="bg-green-600 text-white font-semibold py-3 px-6 rounded-lg shadow-md hover:bg-green-700 transition-colors duration-200">
+                    Create Voucher
+                </button>
+            </div>
+        </div>
+
+        <div class="space-y-4 p-6 bg-gray-50 rounded-lg border border-gray-200" id="voucherHistorySection">
+            <div class="flex justify-between items-center">
+                <h2 class="text-xl font-semibold text-gray-700">Voucher History</h2>
+                <button id="getVouchersBtn" class="bg-purple-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-purple-700 transition-colors duration-200">
+                    View Vouchers
+                </button>
+            </div>
+            <div id="voucherTableContainer" class="table-container hidden">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-200 sticky top-0">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Voucher Code</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Created Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200" id="voucherTableBody">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="messageBox" class="p-4 rounded-lg font-medium text-sm hidden"></div>
+    </div>
+
+    <div id="assignVoucherModal" class="fixed inset-0 hidden items-center justify-center z-50 modal-overlay">
+        <div class="bg-white p-6 rounded-xl shadow-2xl w-full max-w-md space-y-4">
+            <h3 class="text-xl font-bold text-gray-800">Assign Voucher</h3>
+            <p class="text-sm text-gray-600">Voucher Code: <span id="modalVoucherCode" class="font-semibold"></span></p>
+
+            <div class="space-y-2">
+                <input type="text" id="recipientPhone" placeholder="Recipient's Phone Number" class="w-full p-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <input type="email" id="recipientEmail" placeholder="Recipient's Email" class="w-full p-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <textarea id="specialMessage" placeholder="Special Message (e.g., Happy Birthday!)" rows="3" class="w-full p-3 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
+
+            <div class="flex justify-end space-x-4">
+                <button id="cancelAssignBtn" class="bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-400 transition-colors duration-200">
+                    Cancel
+                </button>
+                <button id="confirmAssignBtn" class="bg-indigo-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors duration-200">
+                    Assign Voucher
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const memberCodeInput = document.getElementById('memberCodeInput');
+        const getBalanceBtn = document.getElementById('getBalanceBtn');
+        const balanceDisplay = document.getElementById('balanceDisplay');
+        const currentBalanceSpan = document.getElementById('currentBalance');
+        const voucherAmountInput = document.getElementById('voucherAmountInput');
+        const createVoucherBtn = document.getElementById('createVoucherBtn');
+        const getVouchersBtn = document.getElementById('getVouchersBtn');
+        const voucherTableBody = document.getElementById('voucherTableBody');
+        const voucherTableContainer = document.getElementById('voucherTableContainer');
+        const messageBox = document.getElementById('messageBox');
+        
+        // Modal elements
+        const assignVoucherModal = document.getElementById('assignVoucherModal');
+        const modalVoucherCodeSpan = document.getElementById('modalVoucherCode');
+        const recipientPhoneInput = document.getElementById('recipientPhone');
+        const recipientEmailInput = document.getElementById('recipientEmail');
+        const specialMessageTextarea = document.getElementById('specialMessage');
+        const cancelAssignBtn = document.getElementById('cancelAssignBtn');
+        const confirmAssignBtn = document.getElementById('confirmAssignBtn');
+
+        let currentVoucherCode = null; // Store the voucher code to be assigned
+
+        function showMessage(text, isError = false) {
+            messageBox.textContent = text;
+            messageBox.classList.remove('hidden');
+            if (isError) {
+                messageBox.classList.remove('bg-green-100', 'text-green-800');
+                messageBox.classList.add('bg-red-100', 'text-red-800');
+            } else {
+                messageBox.classList.remove('bg-red-100', 'text-red-800');
+                messageBox.classList.add('bg-green-100', 'text-green-800');
+            }
+        }
+
+        getBalanceBtn.addEventListener('click', async () => {
+            const memberCode = memberCodeInput.value.trim();
+            if (!memberCode) {
+                showMessage('Please enter a member code.', true);
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/member/balance', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ memberCode })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    currentBalanceSpan.textContent = parseFloat(data.balance).toFixed(2);
+                    balanceDisplay.classList.remove('hidden');
+                    showMessage(data.message);
+                } else {
+                    balanceDisplay.classList.add('hidden');
+                    showMessage(data.error || 'Failed to retrieve balance.', true);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                showMessage('An error occurred while connecting to the server.', true);
+            }
+        });
+
+        createVoucherBtn.addEventListener('click', async () => {
+            const memberCode = memberCodeInput.value.trim();
+            const voucherAmount = parseFloat(voucherAmountInput.value);
+
+            if (!memberCode) {
+                showMessage('Please enter a member code first.', true);
+                return;
+            }
+            if (isNaN(voucherAmount) || voucherAmount <= 0) {
+                showMessage('Please enter a valid voucher amount.', true);
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/voucher/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ memberCode, voucherAmount })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    getBalanceBtn.click();
+                    showMessage(`Voucher created successfully! Code: ${data.voucherCode}`);
+                } else {
+                    showMessage(data.error || 'Failed to create voucher.', true);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                showMessage('An error occurred while creating the voucher.', true);
+            }
+        });
+
+        getVouchersBtn.addEventListener('click', async () => {
+            const memberCode = memberCodeInput.value.trim();
+            if (!memberCode) {
+                showMessage('Please enter a member code to view vouchers.', true);
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/member/vouchers', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ memberCode })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    displayVouchers(data.vouchers);
+                    showMessage(data.message);
+                } else {
+                    voucherTableContainer.classList.add('hidden');
+                    showMessage(data.error || 'Failed to retrieve voucher history.', true);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                showMessage('An error occurred while fetching the voucher history.', true);
+            }
+        });
+
+        function displayVouchers(vouchers) {
+            voucherTableBody.innerHTML = '';
+            if (vouchers.length === 0) {
+                voucherTableContainer.classList.add('hidden');
+                showMessage('No vouchers found for this member.', true);
+                return;
+            }
+
+            vouchers.forEach(voucher => {
+                const row = document.createElement('tr');
+                const actionsHtml = voucher.STATUS === 'ACTIVE'
+                    ? `<button class="assign-btn bg-blue-500 text-white px-3 py-1 rounded-md text-xs hover:bg-blue-600 transition-colors duration-200" data-voucher-code="${voucher.VOUCHER_CODE}">Assign</button>`
+                    : `<span>&mdash;</span>`;
+                    
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${voucher.VOUCHER_CODE}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${parseFloat(voucher.AMOUNT).toFixed(2)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${voucher.STATUS}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${new Date(voucher.CREATED_DATE).toLocaleDateString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">${actionsHtml}</td>
+                `;
+                voucherTableBody.appendChild(row);
+            });
+
+            // Add event listeners to the new "Assign" buttons
+            document.querySelectorAll('.assign-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    currentVoucherCode = event.target.getAttribute('data-voucher-code');
+                    modalVoucherCodeSpan.textContent = currentVoucherCode;
+                    assignVoucherModal.classList.remove('hidden');
+                    assignVoucherModal.classList.add('flex');
+                });
+            });
+
+            voucherTableContainer.classList.remove('hidden');
+        }
+
+        // Close modal event listeners
+        cancelAssignBtn.addEventListener('click', () => {
+            assignVoucherModal.classList.add('hidden');
+            assignVoucherModal.classList.remove('flex');
+            // Clear the form
+            recipientPhoneInput.value = '';
+            recipientEmailInput.value = '';
+            specialMessageTextarea.value = '';
+        });
+
+        // Confirm assign event listener
+        confirmAssignBtn.addEventListener('click', async () => {
+            const recipientPhone = recipientPhoneInput.value.trim();
+            const recipientEmail = recipientEmailInput.value.trim();
+            const specialMessage = specialMessageTextarea.value.trim();
+
+            if (!recipientPhone && !recipientEmail) {
+                showMessage('Please enter either a phone number or an email address.', true);
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:3000/api/voucher/assign', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        voucherCode: currentVoucherCode,
+                        recipientPhone,
+                        recipientEmail,
+                        specialMessage
+                    })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showMessage(`Voucher assigned successfully! The link has been sent to the recipient.`);
+                    assignVoucherModal.classList.add('hidden');
+                    assignVoucherModal.classList.remove('flex');
+                    getVouchersBtn.click(); // Refresh the voucher history
+                } else {
+                    showMessage(data.error || 'Failed to assign voucher.', true);
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                showMessage('An error occurred while assigning the voucher.', true);
+            }
+        });
+
+    </script>
+</body>
+</html>

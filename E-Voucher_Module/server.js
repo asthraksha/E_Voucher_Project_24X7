@@ -110,6 +110,40 @@ app.post('/api/member/vouchers', async (req, res) => {
     }
 });
 
+app.post('/api/voucher/assign', async (req, res) => {
+    const { voucherCode, recipientPhone, recipientEmail, specialMessage } = req.body;
+    
+    if (!voucherCode) {
+        return res.status(400).json({ error: 'Voucher code is required.' });
+    }
+    if (!recipientPhone && !recipientEmail) {
+        return res.status(400).json({ error: 'Recipient phone or email is required.' });
+    }
+
+    try {
+        const pool = await sql.connect(dbConfig);
+        const request = pool.request();
+        
+        request.input('VoucherCode', sql.VarChar(50), voucherCode);
+        request.input('RecipientPhone', sql.VarChar(20), recipientPhone || null);
+        request.input('RecipientEmail', sql.VarChar(100), recipientEmail || null);
+        request.input('SpecialMessage', sql.NVarChar(255), specialMessage || null);
+        
+        const result = await request.execute('sp_AssignVoucher');
+
+        const assignmentLink = result.recordset[0].ASSIGNMENT_LINK;
+        console.log(`Voucher assignment successful. Link sent to ${recipientEmail || recipientPhone}: ${assignmentLink}`);
+
+        res.status(200).json({
+            message: 'Voucher assigned and link sent successfully.',
+            assignmentLink: assignmentLink
+        });
+    } catch (err) {
+        console.error('Error assigning voucher:', err);
+        res.status(500).json({ error: 'An error occurred while assigning the voucher.' });
+    }
+});
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server listening at http://localhost:${port}`);
