@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your E-Voucher</title>
+    <style>
+        body { font-family: 'Arial', sans-serif; background-color: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .voucher-card { background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); color: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); text-align: center; max-width: 500px; width: 90%; position: relative; overflow: hidden; }
+        .voucher-card::before { content: ''; position: absolute; top: -50px; left: -50px; width: 200px; height: 200px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; }
+        .header { border-bottom: 2px dashed rgba(255, 255, 255, 0.5); padding-bottom: 20px; margin-bottom: 20px; }
+        .header h1 { font-size: 2.5em; margin: 0; }
+        .details { text-align: left; margin-top: 20px; }
+        .details p { margin: 10px 0; font-size: 1.1em; }
+        .details strong { font-weight: bold; }
+        .qr-code-container { margin-top: 30px; background-color: white; padding: 10px; border-radius: 10px; display: inline-block; }
+        .message { margin-top: 20px; font-style: italic; font-size: 1.2em; border-top: 1px solid rgba(255, 255, 255, 0.3); padding-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="voucher-card">
+        <div class="header">
+            <h1>🎉 Your E-Voucher 🎉</h1>
+            <p>Presented by [Your Company Name]</p>
+        </div>
+
+        <div class="message">
+            <p><%= voucher.SPECIAL_MESSAGE %></p>
+        </div>
+
+        <div class="details">
+            <p><strong>Voucher Code:</strong> <%= voucher.VOUCHER_CODE %></p>
+            <p><strong>Amount:</strong> [Assuming you have an amount column] Rs. 1000.00</p>
+            <p><strong>Recipient:</strong> <%= voucher.RECIPIENT_EMAIL || voucher.RECIPIENT_PHONE %></p>
+            <p><strong>Issued On:</strong> <%= new Date(voucher.ASSIGNED_DATE).toLocaleDateString() %></p>
+        </div>
+
+        <div class="qr-code-container">
+            <div id="qrcode"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+    <script>
+        // Generate QR code with the voucher link
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            text: window.location.href, // This will encode the current URL
+            width: 128,
+            height: 128,
+            colorDark : "#000000",
+            colorLight : "#ffffff",
+            correctLevel : QRCode.CorrectLevel.H
+        });
+    </script>
+</body>
+</html>
