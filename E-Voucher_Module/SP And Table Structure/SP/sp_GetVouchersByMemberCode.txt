@@ -1,0 +1,39 @@
+USE [24X7_DB]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_GetVouchersByMemberCode]    Script Date: 8/7/2025 8:54:06 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+/***************************************************************************************************
+Procedure			: sp_GetVouchersByMemberCode
+Create Date			: 07/08/2025
+Created By			: Vajira Samarasingha(techsupport.05@24x7retail.com)
+Description:        : Get Voucher From that Created  
+Affected table(s)	: T_VOUCHER
+Usage				: EXEC sp_GetVouchersByMemberCode
+****************************************************************************************************/
+
+ALTER PROCEDURE [dbo].[sp_GetVouchersByMemberCode]
+    @memberMobile VARCHAR(20)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+	DECLARE @NUMBER NVARCHAR(30);
+	SELECT @NUMBER = CM_CODE FROM M_TBLCUSTOMER WHERE CM_MOBILE1=@memberMobile
+
+    SELECT
+        [VOUCHER_CODE],
+        [MEMBER_CODE],
+        [AMOUNT],
+        [STATUS],
+        [CREATED_DATE]
+    FROM
+        [dbo].[T_VOUCHER]
+    WHERE
+        [MEMBER_CODE] = @NUMBER
+    ORDER BY
+        [CREATED_DATE] DESC;
+END;

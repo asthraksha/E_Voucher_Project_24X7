@@ -1,0 +1,40 @@
+USE [24X7_DB]
+GO
+/****** Object:  StoredProcedure [dbo].[GetVoucherDetails]    Script Date: 8/8/2025 10:34:02 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/***************************************************************************************************
+Procedure			: GetVoucherDetails
+Create Date			: 08/08/2025
+Created By			: Vajira Samarasingha(techsupport.05@24x7retail.com)
+Description:        : Get Voucher Details
+Affected table(s)	: T_VOUCHER_ASSIGNMENTS
+Usage				: EXEC GetVoucherDetails
+****************************************************************************************************/
+
+
+ALTER PROCEDURE [dbo].[GetVoucherDetails]
+    @VoucherCode NVARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Select all columns for the given voucher code
+    SELECT
+        ASSIGNMENT_ID,
+        VOUCHER_CODE,
+		VOUCHER_AMOUNT,
+        RECIPIENT_PHONE,
+        RECIPIENT_EMAIL,
+        SPECIAL_MESSAGE,
+        ASSIGNMENT_LINK,
+        ASSIGNED_DATE
+    FROM
+        T_VOUCHER_ASSIGNMENTS
+    WHERE
+        VOUCHER_CODE = @VoucherCode;
+END

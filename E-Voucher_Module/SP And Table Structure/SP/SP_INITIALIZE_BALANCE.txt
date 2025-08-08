@@ -1,0 +1,57 @@
+USE [24X7_DB]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_INITIALIZE_BALANCE]    Script Date: 8/7/2025 9:11:15 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+/***************************************************************************************************
+Procedure			: SP_INITIALIZE_BALANCE
+Create Date			: 07/08/2025
+Created By			: Vajira Samarasingha(techsupport.05@24x7retail.com)
+Description:        : Check Balance on Cash in and update Balance to affected table
+Affected table(s)	: T_CUSTOMER_BALANCE,
+Usage				: EXEC sp_AssignVoucher
+****************************************************************************************************/
+
+
+ALTER PROCEDURE [dbo].[SP_INITIALIZE_BALANCE]
+	@memberMobile varchar(20)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @NUMBER NVARCHAR(30);
+	SELECT @NUMBER = CM_CODE FROM M_TBLCUSTOMER WHERE CM_MOBILE1=@memberMobile
+
+	-- Calculate the total net amount for the member from all cash-in transactions
+	DECLARE @totalNetAmt decimal(18, 2);
+	SELECT @totalNetAmt = ISNULL(SUM(INVHED_NETAMT), 0)
+	FROM [dbo].[T_TBLINVHEADER]
+	WHERE INVHED_MEMBER = @NUMBER;
+
+	DECLARE @totalbalAmt decimal(18, 2);
+	SELECT @totalbalAmt = ISNULL(SUM(AVAILABLE_BALANCE), 0)
+	FROM [dbo].[T_CUSTOMER_BALANCE]
+	WHERE MEMBER_CODE = @NUMBER;
+
+	-- Check if the member already exists in the balance table
+	IF EXISTS (SELECT 1 FROM [dbo].[T_CUSTOMER_BALANCE] WHERE MEMBER_CODE = @NUMBER)
+	BEGIN
+		-- Update the balance
+		UPDATE [dbo].[T_CUSTOMER_BALANCE]
+		SET AVAILABLE_BALANCE = @totalbalAmt,
+			LAST_UPDATED_DATE = GETDATE()
+		WHERE MEMBER_CODE = @NUMBER;
+	END
+	ELSE
+	BEGIN
+		-- Insert a new record
+		INSERT INTO [dbo].[T_CUSTOMER_BALANCE] (MEMBER_CODE, AVAILABLE_BALANCE, LAST_UPDATED_DATE)
+		VALUES (@NUMBER, @totalNetAmt, GETDATE());
+	END
+
+	-- Return the newly updated or inserted balance
+	SELECT AVAILABLE_BALANCE FROM [dbo].[T_CUSTOMER_BALANCE] WHERE MEMBER_CODE = @NUMBER;
+END

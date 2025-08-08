@@ -1,0 +1,73 @@
+USE [24X7_DB]
+GO
+/****** Object:  StoredProcedure [dbo].[SP_CREATE_VOUCHER]    Script Date: 8/7/2025 8:52:22 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+/***************************************************************************************************
+Procedure			: SP_CREATE_VOUCHER
+Create Date			: 07/08/2025
+Created By			: Vajira Samarasingha(techsupport.05@24x7retail.com)
+Description:        : Get Voucher From that Created  
+Affected table(s)	: T_CUSTOMER_BALANCE,
+Usage				: EXEC SP_CREATE_VOUCHER
+****************************************************************************************************/
+
+ALTER PROCEDURE [dbo].[SP_CREATE_VOUCHER]
+	@memberMobile varchar(20),
+	@voucherAmount decimal(18, 2),
+	@voucherCode varchar(50) OUTPUT
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+	BEGIN TRY
+		BEGIN TRANSACTION;
+
+		DECLARE @currentBalance decimal(18, 2);
+
+		DECLARE @NUMBER NVARCHAR(30);
+		SELECT @NUMBER = CM_CODE FROM M_TBLCUSTOMER WHERE CM_MOBILE1=@memberMobile
+
+		-- Get the current balance with a lock to prevent concurrent updates
+		SELECT @currentBalance = AVAILABLE_BALANCE
+		FROM [dbo].[T_CUSTOMER_BALANCE] WITH (UPDLOCK)
+		WHERE MEMBER_CODE = @NUMBER;
+
+		-- Check if the member exists and has enough balance
+		IF @currentBalance IS NULL OR @currentBalance < @voucherAmount
+		BEGIN
+			-- Raise an error if insufficient funds
+			RAISERROR('Insufficient balance or member not found.', 16, 1);
+			ROLLBACK TRANSACTION;
+			RETURN;
+		END
+
+		-- Deduct the voucher amount from the balance
+		UPDATE [dbo].[T_CUSTOMER_BALANCE]
+		SET AVAILABLE_BALANCE = AVAILABLE_BALANCE - @voucherAmount,
+			LAST_UPDATED_DATE = GETDATE()
+		WHERE MEMBER_CODE = @NUMBER;
+
+		-- Generate a random voucher code (a simple example)
+		SET @voucherCode = NEWID();
+
+		-- Create the new voucher record in the T_VOUCHER table
+		INSERT INTO [dbo].[T_VOUCHER] (VOUCHER_CODE, MEMBER_CODE, AMOUNT, STATUS, CREATED_DATE)
+		VALUES (@voucherCode, @NUMBER, @voucherAmount, 'ACTIVE', GETDATE());
+
+		COMMIT TRANSACTION;
+	END TRY
+	BEGIN CATCH
+		IF @@TRANCOUNT > 0
+			ROLLBACK TRANSACTION;
+
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+		DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+		DECLARE @ErrorState INT = ERROR_STATE();
+
+		RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+	END CATCH
+END

@@ -1,0 +1,98 @@
+USE [24X7_DB]
+GO
+/****** Object:  StoredProcedure [dbo].[sp_AssignVoucher]    Script Date: 8/8/2025 10:35:09 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+/***************************************************************************************************
+Procedure			: sp_AssignVoucher
+Create Date			: 07/08/2025
+Created By			: Vajira Samarasingha(techsupport.05@24x7retail.com)
+Description:        : Assign E-Voucher for a Person
+Affected table(s)	: T_VOUCHER_ASSIGNMENTS
+Usage				: EXEC sp_AssignVoucher
+****************************************************************************************************/
+
+ALTER PROCEDURE [dbo].[sp_AssignVoucher]
+    @VoucherCode VARCHAR(50),
+	@voucherAmount DECIMAL(18,2),
+    @RecipientPhone VARCHAR(20) = NULL,
+    @RecipientEmail VARCHAR(100) = NULL,
+    @SpecialMessage NVARCHAR(255) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @CurrentStatus VARCHAR(20);
+    DECLARE @AssignmentLink VARCHAR(255);
+    DECLARE @GeneratedLinkGUID UNIQUEIDENTIFIER;
+
+    -- Check the current status of the voucher
+    SELECT @CurrentStatus = [STATUS] FROM [dbo].[T_VOUCHER] WHERE [VOUCHER_CODE] = @VoucherCode;
+
+    IF @CurrentStatus IS NULL
+    BEGIN
+        RAISERROR('Voucher not found.', 16, 1);
+        RETURN;
+    END
+
+    IF @CurrentStatus <> 'ACTIVE'
+    BEGIN
+        RAISERROR('Voucher has already been assigned or used.', 16, 1);
+        RETURN;
+    END
+
+    -- Generate a unique GUID for the assignment link
+    SET @GeneratedLinkGUID = NEWID();
+    SET @AssignmentLink = 'http://127.0.0.1:3000/voucher/redeem?id=' + @VoucherCode;
+
+    -- Start a transaction to ensure both operations succeed or fail together
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Update the voucher status
+        UPDATE [dbo].[T_VOUCHER]
+        SET [STATUS] = 'ASSIGNED'
+        WHERE [VOUCHER_CODE] = @VoucherCode;
+
+        -- Insert the assignment record
+        INSERT INTO [dbo].[T_VOUCHER_ASSIGNMENTS] 
+        (
+            [VOUCHER_CODE], 
+			[VOUCHER_AMOUNT],
+            [RECIPIENT_PHONE], 
+            [RECIPIENT_EMAIL], 
+            [SPECIAL_MESSAGE], 
+            [ASSIGNMENT_LINK]
+        )
+        VALUES 
+        (
+            @VoucherCode,
+			@voucherAmount,
+            @RecipientPhone, 
+            @RecipientEmail, 
+            @SpecialMessage, 
+            @AssignmentLink
+        );
+
+        -- Commit the transaction
+        COMMIT TRANSACTION;
+
+        -- Return the assignment link
+        SELECT @AssignmentLink AS ASSIGNMENT_LINK;
+    END TRY
+    BEGIN CATCH
+        -- Rollback the transaction on error
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+
+        -- Re-throw the error
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH;
+END;

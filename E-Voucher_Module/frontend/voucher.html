@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Voucher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        @keyframes bg-move {
+            from {
+                background-position: 0 0;
+            }
+
+            to {
+                background-position: 100% 100%;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-purple-500 to-indigo-600 min-h-screen flex items-center justify-center p-4 sm:p-6">
+
+    <div id="voucher-card"
+        class="bg-white rounded-[3rem] shadow-2xl overflow-hidden max-w-lg w-full text-center transform transition-all duration-500 scale-95 opacity-0">
+
+        <div class="bg-gradient-to-r from-purple-600 to-pink-500 p-8 sm:p-10 text-white relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-full opacity-10"
+                style="background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23fff" fill-opacity="0.2"/></svg>'); background-repeat: repeat; animation: bg-move 20s linear infinite;">
+            </div>
+            <h1 class="text-4xl sm:text-5xl font-extrabold mb-2 leading-tight drop-shadow-md relative z-10">
+                You're a Star! ✨
+            </h1>
+            <p class="text-lg sm:text-xl font-light opacity-90 relative z-10">
+                A special gift just for you.
+            </p>
+        </div>
+
+        <div class="p-8 sm:p-10 text-left">
+            <div class="bg-purple-50 rounded-2xl p-6 sm:p-8 mb-6 border border-purple-200">
+                <div class="mb-6">
+                    <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-2">Voucher Code</h2>
+                    <p id="voucher-code-display"
+                        class="text-4xl sm:text-5xl font-black text-purple-700 tracking-wide break-words">
+                        Loading...
+                    </p>
+                    <p class="text-xs text-gray-400 mt-1 uppercase font-semibold">Copy & Paste to Redeem</p>
+                </div>
+                <hr class="border-purple-200 my-6">
+                <div
+                    class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-700">Value</h3>
+                        <p id="voucher-amount-display" class="text-3xl font-bold text-green-600">
+                            Loading...
+                        </p>
+                    </div>
+                    <div class="sm:text-right">
+                        <h3 class="text-lg font-medium text-gray-700">Special Message</h3>
+                        <p id="special-message" class="text-xl font-semibold text-gray-800">
+                            Loading...
+                        </p>
+                    </div>
+                </div>
+                <hr class="border-purple-200 my-6">
+                <div class="text-sm text-gray-600 space-y-2">
+                    <div class="flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                        </svg>
+                        <span id="recipient-email">Email: Loading...</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path
+                                d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06L5.706 9.53a11.037 11.037 0 006.105 6.105l.424-.213a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2c-5.523 0-10-4.477-10-10V3z" />
+                        </svg>
+                        <span id="recipient-phone">Phone: Loading...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-2xl border border-gray-200">
+                <h3 class="text-xl font-bold text-gray-800 mb-4">
+                    Instant Redemption
+                </h3>
+                <div class="bg-white p-4 rounded-xl shadow-inner border border-gray-100">
+                    <canvas id="qr-code-canvas" class="w-48 h-48 sm:w-56 sm:h-56"></canvas>
+                </div>
+                <p class="mt-4 text-sm text-gray-500">
+                    Scan this code with your phone or device to redeem instantly.
+                </p>
+            </div>
+
+            <button onclick="handleRedeem()"
+                class="w-full mt-8 bg-purple-600 hover:bg-purple-700 text-white font-bold text-lg py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-offset-2">
+                Redeem Now
+            </button>
+            <div id="error-message" class="mt-4 text-red-600 font-medium hidden"></div>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+
+    <script>
+        // DOM elements
+        const voucherCard = document.getElementById('voucher-card');
+        const voucherCodeEl = document.getElementById('voucher-code-display');
+        const voucherAmountEl = document.getElementById('voucher-amount-display');
+        const specialMessageEl = document.getElementById('special-message');
+        const recipientPhoneEl = document.getElementById('recipient-phone');
+        const recipientEmailEl = document.getElementById('recipient-email');
+        const qrCodeCanvas = document.getElementById('qr-code-canvas');
+        const errorMessageEl = document.getElementById('error-message');
+
+        // Function to extract a query parameter from the URL
+        const getQueryParam = (param) => {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        };
+
+        // Function to simulate fetching voucher data from an API
+        const fetchVoucher = async (voucherCode) => {
+            // This is a placeholder for your actual API call.
+            // Replace with a real fetch call to your backend.
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    const vouchers = {
+                        '32077052-700B-4EB1-BB6E-71223A8D28AD': {
+                            VOUCHER_CODE: '32077052-700B-4EB1-BB6E-71223A8D28AD',
+                            VOUCHER_AMOUNT: '$500',
+                            SPECIAL_MESSAGE: 'Happy Birthday! 🎂',
+                            RECIPIENT_EMAIL: 'vajirasamara54@gmail.com',
+                            RECIPIENT_PHONE: '0765532280'
+                        },
+                        'BEEF-CAFE-CODE-1234': {
+                            VOUCHER_CODE: 'BEEF-CAFE-CODE-1234',
+                            VOUCHER_AMOUNT: '$25',
+                            SPECIAL_MESSAGE: 'Thanks for being a loyal customer!',
+                            RECIPIENT_EMAIL: 'user@example.com',
+                            RECIPIENT_PHONE: '1234567890'
+                        }
+                    };
+                    const voucher = vouchers[voucherCode];
+                    if (voucher) {
+                        resolve(voucher);
+                    } else {
+                        reject(new Error('Could not find a voucher with that code.'));
+                    }
+                }, 1000); // Simulate network delay
+            });
+        };
+
+        // Function to generate and display the QR code
+        const generateQRCode = (data) => {
+            new QRious({
+                element: qrCodeCanvas,
+                value: data,
+                size: 200,
+                padding: 10
+            });
+        };
+
+        // Function to display an error message
+        const displayError = (message) => {
+            errorMessageEl.textContent = message;
+            errorMessageEl.classList.remove('hidden');
+        };
+
+        // Main function to initialize the page
+        const init = async () => {
+            // Use the voucher code from the URL or a default for demonstration
+            const voucherCode = getQueryParam('id') || '32077052-700B-4EB1-BB6E-71223A8D28AD';
+
+            if (!voucherCode) {
+                displayError('Invalid voucher link. Please check the URL.');
+                return;
+            }
+
+            try {
+                const voucherData = await fetchVoucher(voucherCode);
+
+                // Update the DOM with the fetched data
+                voucherCodeEl.textContent = voucherData.VOUCHER_CODE;
+                voucherAmountEl.textContent = `${voucherData.VOUCHER_AMOUNT}`;
+                specialMessageEl.textContent = voucherData.SPECIAL_MESSAGE;
+                recipientPhoneEl.textContent = `Phone: ${voucherData.RECIPIENT_PHONE}`;
+                recipientEmailEl.textContent = `Email: ${voucherData.RECIPIENT_EMAIL}`;
+
+                // Generate the QR code using the full redemption link or code
+                generateQRCode(voucherData.VOUCHER_CODE);
+
+                // Animate the card into view
+                setTimeout(() => {
+                    voucherCard.classList.remove('scale-95', 'opacity-0');
+                    voucherCard.classList.add('scale-100', 'opacity-100');
+                }, 100);
+
+            } catch (error) {
+                displayError(error.message || 'Could not find a voucher with that code.');
+                // Animate the card into view even on error
+                setTimeout(() => {
+                    voucherCard.classList.remove('scale-95', 'opacity-0');
+                    voucherCard.classList.add('scale-100', 'opacity-100');
+                }, 100);
+            }
+        };
+
+        // Example redemption handler
+        function handleRedeem() {
+            console.log('Voucher redemption initiated!');
+            alert('Your voucher redemption has been initiated!');
+        }
+
+        // Run the initialization function when the page loads
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+
+</html>
