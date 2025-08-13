@@ -1,125 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Voucher</title>
+    <title>Your Exclusive Voucher</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
         }
-
-        @keyframes bg-move {
+        .voucher-card {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .voucher-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            pointer-events: none;
+            z-index: 1;
+        }
+        .cutout {
+            position: absolute;
+            width: 40px;
+            height: 80px;
+            background-color: #f3f4f6;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+        .cutout-left {
+            left: -20px;
+            border-radius: 0 40px 40px 0;
+        }
+        .cutout-right {
+            right: -20px;
+            border-radius: 40px 0 0 40px;
+        }
+        .dashed-line {
+            border-top: 2px dashed #6b7280;
+            z-index: 5;
+        }
+        .break-all {
+            word-break: break-all;
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        @keyframes fadeInUp {
             from {
-                background-position: 0 0;
+                opacity: 0;
+                transform: translateY(20px);
             }
-
             to {
-                background-position: 100% 100%;
+                opacity: 1;
+                transform: translateY(0);
             }
         }
     </style>
 </head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4">
 
-<body class="bg-gradient-to-br from-purple-500 to-indigo-600 min-h-screen flex items-center justify-center p-4 sm:p-6">
+    <div id="voucher-card" class="voucher-card rounded-3xl shadow-2xl p-6 md:p-10 max-w-2xl w-full text-center transform transition-all duration-500 scale-95 opacity-0 relative">
+        <div class="cutout cutout-left"></div>
+        <div class="cutout cutout-right"></div>
+        
+        <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-2 drop-shadow-lg fade-in-up">Your Gift Awaits! 🎉</h1>
+        <p class="text-lg text-gray-800 mb-8 fade-in-up" style="animation-delay: 0.1s;">A special treat just for you.</p>
 
-    <div id="voucher-card"
-        class="bg-white rounded-[3rem] shadow-2xl overflow-hidden max-w-lg w-full text-center transform transition-all duration-500 scale-95 opacity-0">
-
-        <div class="bg-gradient-to-r from-purple-600 to-pink-500 p-8 sm:p-10 text-white relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-full opacity-10"
-                style="background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23fff" fill-opacity="0.2"/></svg>'); background-repeat: repeat; animation: bg-move 20s linear infinite;">
+        <div class="flex flex-col md:flex-row bg-white rounded-3xl shadow-inner p-6 md:p-8 items-center justify-between gap-6 relative z-20 fade-in-up" style="animation-delay: 0.2s;">
+            <div class="w-full text-center md:text-left md:border-r md:border-dashed md:border-gray-300 md:pr-6">
+                <p class="text-sm font-medium text-blue-600 uppercase">Voucher Code</p>
+                <p id="voucher-code-display" class="text-4xl md:text-5xl font-black text-gray-900 tracking-wider mt-1 drop-shadow-sm break-all animate-pulse">LOADING...</p>
+                
+                <p class="text-sm font-medium text-blue-600 uppercase mt-6">Special Message</p>
+                <p id="special-message" class="text-xl text-gray-700 mt-1">LOADING...</p>
             </div>
-            <h1 class="text-4xl sm:text-5xl font-extrabold mb-2 leading-tight drop-shadow-md relative z-10">
-                You're a Star! ✨
-            </h1>
-            <p class="text-lg sm:text-xl font-light opacity-90 relative z-10">
-                A special gift just for you.
-            </p>
+            
+            <div class="w-full text-center md:text-left md:pl-6 mt-6 md:mt-0">
+                <p class="text-sm font-medium text-blue-600 uppercase">Voucher Amount</p>
+                <p id="recipient-amount" class="text-4xl font-extrabold text-green-600 mt-1 drop-shadow-sm">LOADING...</p>
+
+                <p class="text-sm font-medium text-blue-600 uppercase mt-6">Recipient Info</p>
+                <div class="space-y-2 text-gray-600 mt-1 text-base">
+                    <p id="recipient-email" class="flex items-center justify-center md:justify-start gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg> <span>Email: LOADING...</span></p>
+                    <p id="recipient-phone" class="flex items-center justify-center md:justify-start gap-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg> <span>Phone: LOADING...</span></p>
+                </div>
+            </div>
         </div>
 
-        <div class="p-8 sm:p-10 text-left">
-            <div class="bg-purple-50 rounded-2xl p-6 sm:p-8 mb-6 border border-purple-200">
-                <div class="mb-6">
-                    <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-2">Voucher Code</h2>
-                    <p id="voucher-code-display"
-                        class="text-4xl sm:text-5xl font-black text-purple-700 tracking-wide break-words">
-                        Loading...
-                    </p>
-                    <p class="text-xs text-gray-400 mt-1 uppercase font-semibold">Copy & Paste to Redeem</p>
-                </div>
-                <hr class="border-purple-200 my-6">
-                <div
-                    class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 space-y-4 sm:space-y-0">
-                    <div>
-                        <h3 class="text-lg font-medium text-gray-700">Value</h3>
-                        <p id="voucher-amount-display" class="text-3xl font-bold text-green-600">
-                            Loading...
-                        </p>
-                    </div>
-                    <div class="sm:text-right">
-                        <h3 class="text-lg font-medium text-gray-700">Special Message</h3>
-                        <p id="special-message" class="text-xl font-semibold text-gray-800">
-                            Loading...
-                        </p>
-                    </div>
-                </div>
-                <hr class="border-purple-200 my-6">
-                <div class="text-sm text-gray-600 space-y-2">
-                    <div class="flex items-center space-x-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                            <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                        </svg>
-                        <span id="recipient-email">Email: Loading...</span>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-purple-500" viewBox="0 0 20 20"
-                            fill="currentColor">
-                            <path
-                                d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06L5.706 9.53a11.037 11.037 0 006.105 6.105l.424-.213a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2c-5.523 0-10-4.477-10-10V3z" />
-                        </svg>
-                        <span id="recipient-phone">Phone: Loading...</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="flex flex-col items-center justify-center p-6 bg-gray-50 rounded-2xl border border-gray-200">
-                <h3 class="text-xl font-bold text-gray-800 mb-4">
-                    Instant Redemption
-                </h3>
-                <div class="bg-white p-4 rounded-xl shadow-inner border border-gray-100">
-                    <canvas id="qr-code-canvas" class="w-48 h-48 sm:w-56 sm:h-56"></canvas>
-                </div>
-                <p class="mt-4 text-sm text-gray-500">
-                    Scan this code with your phone or device to redeem instantly.
-                </p>
-            </div>
-
-            <button onclick="handleRedeem()"
-                class="w-full mt-8 bg-purple-600 hover:bg-purple-700 text-white font-bold text-lg py-4 px-8 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-offset-2">
-                Redeem Now
-            </button>
-            <div id="error-message" class="mt-4 text-red-600 font-medium hidden"></div>
-
+        <div class="w-full my-8 fade-in-up" style="animation-delay: 0.3s;">
+            <div class="dashed-line"></div>
         </div>
+
+        <div class="bg-white rounded-3xl shadow-inner p-6 flex flex-col items-center relative z-20 fade-in-up" style="animation-delay: 0.4s;">
+            <h3 class="text-xl md:text-2xl font-bold text-gray-800 mb-2">Ready to Redeem?</h3>
+            <p class="text-sm text-gray-500 mb-4">Scan this QR code or click the button below.</p>
+            <canvas id="qr-code-canvas" class="rounded-lg shadow-md bg-white p-2 border border-gray-200"></canvas>
+        </div>
+
+        <button onclick="handleRedeem()" class="mt-8 bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-full transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-blue-300 focus:ring-offset-2 fade-in-up" style="animation-delay: 0.5s;">
+            Redeem Now
+        </button>
+
+        <div id="error-message" class="mt-4 text-red-600 font-semibold hidden fade-in-up" style="animation-delay: 0.6s;"></div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
-
     <script>
         // DOM elements
         const voucherCard = document.getElementById('voucher-card');
         const voucherCodeEl = document.getElementById('voucher-code-display');
-        const voucherAmountEl = document.getElementById('voucher-amount-display');
         const specialMessageEl = document.getElementById('special-message');
         const recipientPhoneEl = document.getElementById('recipient-phone');
         const recipientEmailEl = document.getElementById('recipient-email');
+        const recipientAmountlEl = document.getElementById('recipient-amount');
         const qrCodeCanvas = document.getElementById('qr-code-canvas');
         const errorMessageEl = document.getElementById('error-message');
 
@@ -129,36 +134,20 @@
             return urlParams.get(param);
         };
 
-        // Function to simulate fetching voucher data from an API
+        // Function to fetch voucher data from the API
         const fetchVoucher = async (voucherCode) => {
-            // This is a placeholder for your actual API call.
-            // Replace with a real fetch call to your backend.
-            return new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    const vouchers = {
-                        '32077052-700B-4EB1-BB6E-71223A8D28AD': {
-                            VOUCHER_CODE: '32077052-700B-4EB1-BB6E-71223A8D28AD',
-                            VOUCHER_AMOUNT: '$500',
-                            SPECIAL_MESSAGE: 'Happy Birthday! 🎂',
-                            RECIPIENT_EMAIL: 'vajirasamara54@gmail.com',
-                            RECIPIENT_PHONE: '0765532280'
-                        },
-                        'BEEF-CAFE-CODE-1234': {
-                            VOUCHER_CODE: 'BEEF-CAFE-CODE-1234',
-                            VOUCHER_AMOUNT: '$25',
-                            SPECIAL_MESSAGE: 'Thanks for being a loyal customer!',
-                            RECIPIENT_EMAIL: 'user@example.com',
-                            RECIPIENT_PHONE: '1234567890'
-                        }
-                    };
-                    const voucher = vouchers[voucherCode];
-                    if (voucher) {
-                        resolve(voucher);
-                    } else {
-                        reject(new Error('Could not find a voucher with that code.'));
-                    }
-                }, 1000); // Simulate network delay
-            });
+            try {
+                // Fetch from the Express.js API endpoint
+                const response = await fetch(`/api/voucher/${voucherCode}`);
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to fetch voucher');
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching voucher:', error);
+                throw error;
+            }
         };
 
         // Function to generate and display the QR code
@@ -167,7 +156,7 @@
                 element: qrCodeCanvas,
                 value: data,
                 size: 200,
-                padding: 10
+                padding: 15
             });
         };
 
@@ -175,31 +164,39 @@
         const displayError = (message) => {
             errorMessageEl.textContent = message;
             errorMessageEl.classList.remove('hidden');
+            // Hide the loading state and show a static error
+            voucherCodeEl.classList.remove('animate-pulse');
+            specialMessageEl.textContent = "Oops! Something went wrong.";
+            recipientAmountlEl.textContent = "Error";
+            recipientEmailEl.querySelector('span').textContent = "Email: N/A";
+            recipientPhoneEl.querySelector('span').textContent = "Phone: N/A";
+            qrCodeCanvas.style.display = 'none';
         };
 
         // Main function to initialize the page
         const init = async () => {
-            // Use the voucher code from the URL or a default for demonstration
-            const voucherCode = getQueryParam('id') || '32077052-700B-4EB1-BB6E-71223A8D28AD';
+            const voucherCode = getQueryParam('id');
 
             if (!voucherCode) {
                 displayError('Invalid voucher link. Please check the URL.');
-                return;
             }
 
             try {
                 const voucherData = await fetchVoucher(voucherCode);
-
+                
                 // Update the DOM with the fetched data
                 voucherCodeEl.textContent = voucherData.VOUCHER_CODE;
-                voucherAmountEl.textContent = `${voucherData.VOUCHER_AMOUNT}`;
                 specialMessageEl.textContent = voucherData.SPECIAL_MESSAGE;
-                recipientPhoneEl.textContent = `Phone: ${voucherData.RECIPIENT_PHONE}`;
-                recipientEmailEl.textContent = `Email: ${voucherData.RECIPIENT_EMAIL}`;
+                recipientPhoneEl.querySelector('span').textContent = `Phone: ${voucherData.RECIPIENT_PHONE}`;
+                recipientEmailEl.querySelector('span').textContent = `Email: ${voucherData.RECIPIENT_EMAIL}`;
+                recipientAmountlEl.textContent = voucherData.VOUCHER_AMOUNT;
 
-                // Generate the QR code using the full redemption link or code
-                generateQRCode(voucherData.VOUCHER_CODE);
+                // Stop the loading animation
+                voucherCodeEl.classList.remove('animate-pulse');
 
+                // Generate the QR code using the full redemption link
+                generateQRCode(voucherData.ASSIGNMENT_LINK);
+                
                 // Animate the card into view
                 setTimeout(() => {
                     voucherCard.classList.remove('scale-95', 'opacity-0');
@@ -226,5 +223,4 @@
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
-
 </html>
