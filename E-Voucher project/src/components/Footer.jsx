@@ -1,5 +1,7 @@
 import React from 'react';
 import { Youtube, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
+import logo from '../assests/LOGO.png'
+
 
 const Footer = () => {
   return (
@@ -8,7 +10,11 @@ const Footer = () => {
         <div className="flex justify-between items-center py-8">
           {/* Logo */}
           <div className="flex items-center">
-            <h2 className="text-2xl font-bold text-gray-900">LOGO</h2>
+          <img
+              src= {logo}
+              alt="Company Logo"
+              className="h-10 w-auto"
+            />
           </div>
 
           {/* Social Media Icons */}
