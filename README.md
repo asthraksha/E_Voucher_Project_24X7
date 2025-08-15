@@ -1,104 +1,43 @@
-# E_Voucher_Project_24X7
-Junior E Voucher Module
+🚀 E-Voucher System Project Overview This project is an E-Voucher system that allows customers to manage their balances, create vouchers, and assign them to others. This README provides instructions for setting up the database, configuring the application, and a general overview of the system's functionality.
 
-24x7 Retail E-Voucher Portal
-This project is a simple, single-page web application simulating a premium e-voucher portal for 24x7 Retail. It allows users to purchase, allocate, and redeem digital vouchers with a focus on a clean, responsive user interface and a mock backend for demonstration purposes.
+🛠️ Getting Started
+Database Restoration To get the application running, you'll first need to restore the database. The necessary stored procedures and table structures have been provided for you to update the database.
 
-✨ Features
-User-Friendly Interface: Clean and intuitive design with responsive layouts for various devices.
+SQL Server Configuration
 
-Voucher Purchase:
+After restoring the database, enable the network protocols and set up a static IP address: Open SQL Server Configuration Manager. Enable the necessary network protocols (e.g., TCP/IP). Configure the pipeline to use a static IP address.
 
-Select from predefined voucher denominations.
+Application Configuration Update the dbConfig.js file with your specific database connection details.
 
-Specify quantity for bulk purchases.
+JavaScript
 
-Shopping cart functionality with total amount and quantity.
+// dbConfig.js const config = { user: 'pll', password: 'myposadminauthentication', server: '127.0.0.1', // Update with your static IP or server address database: '24X7_DB', options: { encrypt: true, trustServerCertificate: true, }, };
 
-Support for Voucher Bundles: Purchase a bundle (e.g., Rs. 1,000 bundle for two Rs. 500 vouchers) which then breaks down into individual child vouchers for allocation/redemption.
+module.exports = config; Note: Ensure the server field is updated with your static IP address.
 
-Voucher Allocation:
+📝 System Functionality
+The E-Voucher system is a POS-integrated application that handles customer balances and voucher management.
 
-Allocate newly purchased vouchers to a recipient's mobile number.
+Balance Management
 
-Add a personalized message to allocated vouchers.
+Customers can check their balance by entering their phone number into the E-Voucher system and clicking the "Get Balance" button.
+If the customer's phone number exists in the T_CUSTOMER_BALANCE table, their balance is updated with the HED_NETAMT from the T_TBLINVHEADER table.
+If the customer is new, a new record is created in the T_CUSTOMER_BALANCE table.
+A test customer number is available for system testing: +94741992994.
+Voucher Creation
 
-Option to keep vouchers for oneself (allocate to buyer's mobile).
+After checking their balance, a customer can create a new voucher by entering the desired amount and clicking "Create Voucher". This process automatically updates the customer's balance.
+A unique, random voucher code is generated, and a new record is added to the T_VOUCHER table with the voucher amount.
+Viewing Vouchers
 
-My Vouchers View:
+Customers can view all their created vouchers by clicking the "Show Voucher" button.
+This displays a list of vouchers with their details and current status (e.g., Assigned or Not Assigned). The data is retrieved directly from the T_VOUCHER table.
+Voucher Assignment
 
-Verify ownership via mobile number and OTP (mocked).
+To assign a voucher, a customer clicks the "Assign" button next to a specific voucher.
+The customer enters the recipient's phone number, email, and an optional message.
+Clicking "Send" triggers the backend to create a unique URL and send it to the recipient's mobile number via SMS.
+A new record is added to the T_VOUCHER_ASSIGNMENTS table with the recipient's details.
+The recipient can then click on the link to view the voucher details, including a QR code. The URL format is as follows:
 
-Displays all active, unredeemed vouchers owned by the user.
-
-Grouped Vouchers: Multiple vouchers allocated to the same mobile number with the exact same message are grouped under an expandable summary card, showing total value and the shared message.
-
-Individual voucher cards display value, ID, type, and any personalized message.
-
-QR code generation for each voucher (mocked for visual representation).
-
-Voucher Redemption:
-
-Verify redemption via mobile number and OTP (mocked).
-
-Select individual vouchers for redemption.
-
-Supports partial redemption: Redeem a portion of a voucher's value, with the remaining balance issued as a new voucher.
-
-Displays total selected value for redemption.
-
-Toast Notifications: Provides real-time feedback for user actions (success, error, info).
-
-Loading Indicators: Visual feedback during simulated asynchronous operations.
-
-🚀 How to Use
-This project is a single HTML file with embedded CSS and JavaScript, making it incredibly easy to run.
-
-Save the Code: Copy the entire code content into a file named index.html.
-
-Open in Browser: Open the index.html file using any modern web browser (e.g., Chrome, Firefox, Edge).
-
-The application will load in your browser, and you can start interacting with it immediately.
-
-📊 Mock Data
-The application uses a mockDatabase JavaScript object to simulate backend storage for users and vouchers. This data is reset each time the page is refreshed.
-
-Pre-existing Data for Testing:
-
-User: 9876543210 (Alice Smith)
-
-Has a Rs. 1,000 voucher ("Happy Birthday! Enjoy your gift.")
-
-Has a Rs. 5,000 voucher ("A token of our appreciation!")
-
-Has two Rs. 500 vouchers (part of a bundle, "Part of a bundle gift!")
-
-User: 1234567890 (Bob Johnson)
-
-Has a Rs. 2,500 promotional voucher.
-
-User: 9998887776 (Charlie Brown)
-
-Can be used as a buyer for new purchases.
-
-OTP Simulation:
-When you enter a mobile number and click "Send OTP", a mock 6-digit OTP will be printed to your browser's developer console (F12 or Ctrl+Shift+I, then go to "Console" tab). Use this OTP to proceed with verification.
-
-💡 Future Enhancements
-Multi-Voucher Redemption: Implement functionality to redeem multiple selected vouchers simultaneously.
-
-Advanced Bundle Options: Allow users to create custom bundles or offer more dynamic bundle configurations.
-
-Search and Filter: Add search and filter options for "My Vouchers" and "Redeem Voucher" sections.
-
-User Authentication: Integrate with a real authentication system (e.g., Firebase Auth) instead of mock OTP.
-
-Persistent Storage: Connect to a real database (e.g., Firebase Firestore) to persist data across sessions.
-
-Transaction History: Display a history of purchases, allocations, and redemptions.
-
-Admin Panel: A separate interface for managing vouchers, users, and transactions.
-
-Improved Error Handling: More robust error messages and user guidance.
-
-Animations: Enhance UI with more subtle and engaging animations.
+http://69.197.150.166:3000/voucher.html?id=44223F56-2210-4BEC-A668-54E9C1563633
